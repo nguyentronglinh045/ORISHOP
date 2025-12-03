@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+    <!-- 1. Cấu hình Layout cho trang Quản trị (Admin) -->
+    <!-- Bất kỳ URL nào bắt đầu bằng /admin/ sẽ dùng giao diện admin.jsp -->
+    <mapping path="/admin/*" decorator="/WEB-INF/decorators/admin.jsp"/>
+
+    <!-- 2. Cấu hình ngoại lệ (Không ốp layout) -->
+    <!-- Các file tĩnh (css, js, ảnh) hoặc API không cần trang trí giao diện -->
+    <mapping path="/assets/*" exclude="true"/>
+    <mapping path="/api/*" exclude="true"/>
+
+    <!-- 3. Cấu hình Layout cho trang Người dùng (Web) -->
+    <!-- Tất cả các URL còn lại sẽ dùng giao diện web.jsp -->
+    <mapping path="/*" decorator="/WEB-INF/decorators/web.jsp"/>
+</sitemesh>
