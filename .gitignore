@@ -26,6 +26,9 @@
 hs_err_pid*
 replay_pid*
 
+# Database configuration (mỗi máy có config riêng)
+src/main/resources/database.properties
+
 # Maven
 target/
 pom.xml.tag

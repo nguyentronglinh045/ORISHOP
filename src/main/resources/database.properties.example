@@ -1,0 +1,52 @@
+# ============================================
+# DATABASE CONFIGURATION TEMPLATE - ORISHOP
+# ============================================
+# Copy file này thành "database.properties" và chỉnh sửa theo máy
+# ============================================
+
+# SQL Server Configuration
+db.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+db.server=YOUR_SERVER_NAME
+db.port=1433
+db.name=ORISHOP
+
+# ============================================
+# AUTHENTICATION MODE - Chọn 1 trong 2 cách:
+# ============================================
+#
+# [1] WINDOWS AUTHENTICATION
+#     - Sử dụng tài khoản Windows đang đăng nhập máy tính
+#     - Cài đặt: db.auth.mode=windows
+#     - Không cần điền username/password
+#     - Yêu cầu: SQL Server phải bật "Windows Authentication mode"
+#
+# [2] SQL SERVER AUTHENTICATION  
+#     - Sử dụng tài khoản tạo trong SQL Server (ví dụ: sa)
+#     - Cài đặt: db.auth.mode=sql
+#     - BẮT BUỘC điền username và password bên dưới
+#     - Yêu cầu: SQL Server phải bật "SQL Server and Windows Authentication mode"
+#
+# ============================================
+db.auth.mode=windows
+
+# ============================================
+# SQL SERVER AUTHENTICATION CREDENTIALS
+# (Chỉ điền khi db.auth.mode=sql)
+# ============================================
+# db.username: Tên đăng nhập SQL Server
+#   - Mặc định là "sa" (System Administrator)
+#   - Hoặc tài khoản bạn đã tạo trong SQL Server
+#
+# db.password: Mật khẩu của tài khoản SQL Server
+#   - Mật khẩu bạn đặt khi cài SQL Server hoặc tạo tài khoản
+#   - Ví dụ: khi cài SQL Server, bạn đặt password cho sa là "123456"
+#            thì điền: db.password=123456
+# ============================================
+db.username=sa
+db.password=your_password_here
+
+# Hibernate Configuration
+hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
+hibernate.hbm2ddl.auto=update
+hibernate.show_sql=true
+hibernate.format_sql=true
