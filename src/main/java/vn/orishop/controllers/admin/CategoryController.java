@@ -98,7 +98,7 @@ public class CategoryController extends HttpServlet {
 
             // Xử lý hình ảnh
             String fileName = "cate" + System.currentTimeMillis();
-            // Dùng "/" để tránh lỗi đường dẫn trên Windows/Linux
+          
             String savedFileName = UploadUtils.processUpload("icon", request, Constant.DIR + "/category", fileName);
             category.setIcon(savedFileName);
 

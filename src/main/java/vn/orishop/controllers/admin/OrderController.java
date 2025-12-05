@@ -104,8 +104,7 @@ public class OrderController extends HttpServlet {
             // Khởi tạo đối tượng
             Order order = new Order();
             
-            // Map dữ liệu từ form vào entity (chú ý: ngày tháng cần converter nếu dùng BeanUtils thuần, 
-            // nhưng ở mức cơ bản có thể giả định form gửi đúng định dạng hoặc xử lý tay nếu lỗi)
+            // Map dữ liệu từ form vào entity 
             BeanUtils.populate(order, request.getParameterMap());
 
             // Gọi hàm update trong service

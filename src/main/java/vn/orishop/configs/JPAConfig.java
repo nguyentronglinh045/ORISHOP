@@ -10,7 +10,7 @@ public class JPAConfig {
 
     public static EntityManager getEntityManager() {
         if (factory == null || !factory.isOpen()) {
-            // "myPersistenceUnit" phải khớp chính xác 100% với tên trong thẻ <persistence-unit name="..."> ở file persistence.xml
+        
             factory = Persistence.createEntityManagerFactory("myPersistenceUnit");
         }
         return factory.createEntityManager();
