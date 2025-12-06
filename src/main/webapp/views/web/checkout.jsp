@@ -3,10 +3,15 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <div class="container mt-5 mb-5">
-    <h2 class="mb-4 text-center text-uppercase">Thanh toán đơn hàng</h2>
+    <h2 class="mb-4 text-center fw-bold">
+        <i class="fas fa-credit-card me-2 text-primary"></i>Thanh toán đơn hàng
+    </h2>
 
     <c:if test="${empty sessionScope.cart or sessionScope.cart.size() == 0}">
-        <div class="alert alert-warning text-center">Giỏ hàng trống. <a href="<c:url value='/product'/>">Mua sắm ngay</a></div>
+        <div class="alert alert-info text-center rounded-custom">
+            Giỏ hàng trống. 
+            <a href="<c:url value='/product'/>" class="fw-bold text-primary">Mua sắm ngay</a>
+        </div>
     </c:if>
 
     <c:if test="${not empty sessionScope.cart}">
@@ -14,8 +19,10 @@
             <div class="row">
                 <!-- Thông tin giao hàng -->
                 <div class="col-md-7">
-                    <div class="card mb-4">
-                        <div class="card-header bg-light fw-bold">Thông tin giao hàng</div>
+                    <div class="card mb-4 shadow-custom">
+                        <div class="card-header fw-bold">
+                            <i class="fas fa-truck me-2"></i>Thông tin giao hàng
+                        </div>
                         <div class="card-body">
                             <!-- Nếu chưa đăng nhập thì yêu cầu đăng nhập -->
                             <c:if test="${sessionScope.account == null}">
@@ -46,8 +53,10 @@
 
                 <!-- Tóm tắt đơn hàng -->
                 <div class="col-md-5">
-                    <div class="card">
-                        <div class="card-header bg-light fw-bold">Đơn hàng của bạn</div>
+                    <div class="card shadow-custom sticky-top" style="top: 100px;">
+                        <div class="card-header fw-bold">
+                            <i class="fas fa-shopping-bag me-2"></i>Đơn hàng của bạn
+                        </div>
                         <ul class="list-group list-group-flush">
                             <c:set var="total" value="0"/>
                             <c:forEach items="${sessionScope.cart}" var="entry">
@@ -56,19 +65,23 @@
                                 <li class="list-group-item d-flex justify-content-between lh-sm">
                                     <div>
                                         <h6 class="my-0">${item.productName}</h6>
-                                        <small class="text-muted">SL: ${item.quantity} x <fmt:formatNumber value="${item.unitPrice}" type="currency" currencySymbol="đ"/></small>
+                                        <small class="text-muted">SL: ${item.quantity} x <fmt:formatNumber value="${item.unitPrice}" type="currency" currencySymbol="₫"/></small>
                                     </div>
-                                    <span class="text-muted"><fmt:formatNumber value="${item.totalPrice}" type="currency" currencySymbol="đ"/></span>
+                                    <span class="text-muted"><fmt:formatNumber value="${item.totalPrice}" type="currency" currencySymbol="₫"/></span>
                                 </li>
                             </c:forEach>
-                            <li class="list-group-item d-flex justify-content-between bg-light">
-                                <span class="fw-bold">Tổng tiền (VNĐ)</span>
-                                <strong class="text-danger"><fmt:formatNumber value="${total}" type="currency" currencySymbol="đ"/></strong>
+                            <li class="list-group-item d-flex justify-content-between bg-light-custom">
+                                <span class="fw-bold fs-5">Tổng tiền</span>
+                                <strong class="text-primary fs-5"><fmt:formatNumber value="${total}" type="currency" currencySymbol="₫"/></strong>
                             </li>
                         </ul>
                         <div class="card-body">
-                            <button type="submit" class="btn btn-success w-100 py-2">XÁC NHẬN ĐẶT HÀNG</button>
-                            <a href="<c:url value='/cart'/>" class="btn btn-link w-100 mt-2">Quay lại giỏ hàng</a>
+                            <button type="submit" class="btn btn-primary w-100 py-3 btn-lg">
+                                <i class="fas fa-check-circle me-2"></i>XÁC NHẬN ĐẶT HÀNG
+                            </button>
+                            <a href="<c:url value='/cart'/>" class="btn btn-outline-primary w-100 mt-2">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại giỏ hàng
+                            </a>
                         </div>
                     </div>
                 </div>

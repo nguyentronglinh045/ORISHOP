@@ -4,9 +4,11 @@
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
-            <div class="card shadow-lg border-0 rounded-lg">
-                <div class="card-header bg-danger text-white text-center">
-                    <h3 class="font-weight-light my-2">Khôi Phục Mật Khẩu</h3>
+            <div class="card shadow-custom border-0 rounded-custom">
+                <div class="card-header text-center">
+                    <h3 class="fw-bold my-2">
+                        <i class="fas fa-key me-2"></i>Khôi Phục Mật Khẩu
+                    </h3>
                 </div>
                 <div class="card-body p-4">
                     <div class="small mb-3 text-muted text-center">
@@ -27,13 +29,20 @@
                         </div>
                         
                         <div class="d-grid gap-2 mt-4 mb-0">
-                            <button class="btn btn-primary btn-block" type="submit">Gửi yêu cầu</button>
+                            <button class="btn btn-primary btn-lg" type="submit">
+                                <i class="fas fa-paper-plane me-2"></i>Gửi yêu cầu
+                            </button>
                         </div>
                     </form>
                 </div>
-                <div class="card-footer text-center py-3">
-                    <div class="small"><a href="<c:url value='/login'/>" class="text-decoration-none">Quay lại Đăng nhập</a></div>
-                    <div class="small mt-2"><a href="<c:url value='/register'/>" class="text-decoration-none">Chưa có tài khoản? Đăng ký!</a></div>
+                <div class="card-footer text-center py-3 bg-light-custom">
+                    <div class="small mb-2">
+                        <a href="<c:url value='/login'/>" class="text-primary fw-bold text-decoration-none">Quay lại Đăng nhập</a>
+                    </div>
+                    <div class="small">
+                        Chưa có tài khoản? 
+                        <a href="<c:url value='/register'/>" class="text-primary fw-bold text-decoration-none">Đăng ký!</a>
+                    </div>
                 </div>
             </div>
         </div>

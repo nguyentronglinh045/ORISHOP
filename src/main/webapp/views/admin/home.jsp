@@ -2,17 +2,17 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <style>
-    /* Tone màu đỏ giống trang Login */
+    /* Admin cards with new theme */
     .ori-card {
         border: none;
-        border-radius: 18px;
+        border-radius: var(--radius-md);
         overflow: hidden;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-base);
     }
     .ori-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 18px 40px rgba(0,0,0,0.15);
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-hover);
     }
 
     /* Tiêu đề card */
@@ -41,21 +41,22 @@
 
     /* Breadcrumb + Title */
     h1 {
+        font-family: 'Quicksand', sans-serif;
         font-weight: 700;
-        color: #b02a37;
+        color: var(--primary);
     }
     .breadcrumb-item.active {
         font-weight: 600;
-        color: #dc3545;
+        color: var(--primary);
     }
 
-    /* Ưu tiên tone màu OriShop */
-    .ori-bg-red { background: linear-gradient(135deg, #dc3545, #b02a37); }
-    .ori-bg-blue { background: linear-gradient(135deg, #0d6efd, #0a58ca); }
-    .ori-bg-green { background: linear-gradient(135deg, #198754, #146c43); }
-    .ori-bg-yellow { background: linear-gradient(135deg, #ffc107, #e0a800); }
-    .ori-bg-info { background: linear-gradient(135deg, #0dcaf0, #0aa8c2); }
-    .ori-bg-danger { background: linear-gradient(135deg, #dc3545, #a82834); }
+    /* Gradient backgrounds with pink theme */
+    .ori-bg-red { background: var(--gradient-primary); }
+    .ori-bg-blue { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+    .ori-bg-green { background: linear-gradient(135deg, #00b894, #00a085); }
+    .ori-bg-yellow { background: linear-gradient(135deg, #fdcb6e, #e17055); }
+    .ori-bg-info { background: linear-gradient(135deg, #ffb6c1, #ff6b9d); }
+    .ori-bg-danger { background: var(--gradient-primary); }
 </style>
 
 <div class="container-fluid px-4">

@@ -16,13 +16,13 @@
         </div>
     </c:if>
 
-    <div class="card mb-4">
+    <div class="card mb-4 shadow-custom">
         <div class="card-header">
-            <i class="fas fa-shopping-cart me-1"></i> Danh sách Đơn hàng
+            <i class="fas fa-shopping-cart me-2"></i>Danh sách Đơn hàng
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped table-hover">
-                <thead class="table-dark">
+            <table class="table table-bordered table-striped table-hover rounded-custom overflow-hidden">
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Khách hàng</th>
@@ -43,8 +43,8 @@
                             <td>
                                 <fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy HH:mm"/>
                             </td>
-                            <td class="text-danger fw-bold">
-                                <fmt:formatNumber value="${o.amount}" type="currency" currencySymbol="đ"/>
+                            <td class="text-primary fw-bold">
+                                <fmt:formatNumber value="${o.amount}" type="currency" currencySymbol="₫"/>
                             </td>
                             <td>
                                 <c:choose>
@@ -56,12 +56,12 @@
                                 </c:choose>
                             </td>
                             <td>
-                                <a href="<c:url value='/admin/order/edit?id=${o.orderId}'/>" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-edit"></i> Cập nhật
+                                <a href="<c:url value='/admin/order/edit?id=${o.orderId}'/>" class="btn btn-primary btn-sm rounded-custom">
+                                    <i class="fas fa-edit me-1"></i>Cập nhật
                                 </a>
-                                <a href="<c:url value='/admin/order/delete?id=${o.orderId}'/>" class="btn btn-danger btn-sm"
+                                <a href="<c:url value='/admin/order/delete?id=${o.orderId}'/>" class="btn btn-danger btn-sm rounded-custom"
                                    onclick="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này?');">
-                                    <i class="fas fa-trash-alt"></i> Xóa
+                                    <i class="fas fa-trash-alt me-1"></i>Xóa
                                 </a>
                             </td>
                         </tr>

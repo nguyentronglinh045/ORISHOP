@@ -22,16 +22,16 @@
         </div>
     </c:if>
 
-    <div class="card mb-4">
+    <div class="card mb-4 shadow-custom">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <div><i class="fas fa-users me-1"></i> Danh sách Tài khoản</div>
+            <div><i class="fas fa-users me-2"></i>Danh sách Tài khoản</div>
             <a href="<c:url value='/admin/user/create'/>" class="btn btn-primary btn-sm">
-                <i class="fas fa-user-plus"></i> Thêm mới
+                <i class="fas fa-user-plus me-1"></i>Thêm mới
             </a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped table-hover">
-                <thead class="table-dark">
+            <table class="table table-bordered table-striped table-hover rounded-custom overflow-hidden">
+                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Tên đăng nhập</th>
@@ -65,12 +65,12 @@
                                 <fmt:formatDate value="${u.createDate}" pattern="dd/MM/yyyy"/>
                             </td>
                             <td>
-                                <a href="<c:url value='/admin/user/edit?id=${u.userId}'/>" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i>
+                                <a href="<c:url value='/admin/user/edit?id=${u.userId}'/>" class="btn btn-warning btn-sm rounded-custom">
+                                    <i class="fas fa-edit me-1"></i>Sửa
                                 </a>
-                                <a href="<c:url value='/admin/user/delete?id=${u.userId}'/>" class="btn btn-danger btn-sm"
+                                <a href="<c:url value='/admin/user/delete?id=${u.userId}'/>" class="btn btn-danger btn-sm rounded-custom"
                                    onclick="return confirm('Bạn có chắc chắn muốn xóa user này không?');">
-                                    <i class="fas fa-trash-alt"></i>
+                                    <i class="fas fa-trash-alt me-1"></i>Xóa
                                 </a>
                             </td>
                         </tr>

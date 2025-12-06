@@ -3,27 +3,35 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <div class="container mt-5 mb-5">
-    <h2 class="mb-4 text-uppercase">Lịch sử đơn hàng</h2>
+    <h2 class="mb-4 fw-bold">
+        <i class="fas fa-history me-2 text-primary"></i>Lịch sử đơn hàng
+    </h2>
     
     <div class="row">
         <div class="col-md-3 mb-4">
             <!-- Sidebar User Menu -->
-            <div class="list-group">
+            <div class="list-group shadow-custom rounded-custom">
                 <a href="#" class="list-group-item list-group-item-action disabled fw-bold">Tài khoản</a>
-                <a href="<c:url value='/order/history'/>" class="list-group-item list-group-item-action active">Đơn hàng của tôi</a>
-                <a href="<c:url value='/logout'/>" class="list-group-item list-group-item-action text-danger">Đăng xuất</a>
+                <a href="<c:url value='/order/history'/>" class="list-group-item list-group-item-action active bg-light-custom text-primary border-primary">Đơn hàng của tôi</a>
+                <a href="<c:url value='/logout'/>" class="list-group-item list-group-item-action text-danger">
+                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                </a>
             </div>
         </div>
         
         <div class="col-md-9">
             <c:if test="${empty orders}">
-                <div class="alert alert-info">Bạn chưa có đơn hàng nào. <a href="<c:url value='/product'/>">Mua sắm ngay!</a></div>
+                <div class="alert alert-info rounded-custom text-center py-4">
+                    <i class="fas fa-shopping-bag fa-3x mb-3 text-primary"></i>
+                    <p class="mb-3">Bạn chưa có đơn hàng nào.</p>
+                    <a href="<c:url value='/product'/>" class="btn btn-primary">Mua sắm ngay!</a>
+                </div>
             </c:if>
 
             <c:if test="${not empty orders}">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-light">
+                    <table class="table table-bordered table-hover rounded-custom overflow-hidden">
+                        <thead>
                             <tr>
                                 <th>Mã ĐH</th>
                                 <th>Ngày đặt</th>
@@ -37,8 +45,8 @@
                                 <tr>
                                     <td>#${o.orderId}</td>
                                     <td><fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy HH:mm"/></td>
-                                    <td class="text-danger fw-bold">
-                                        <fmt:formatNumber value="${o.amount}" type="currency" currencySymbol="đ"/>
+                                    <td class="text-primary fw-bold">
+                                        <fmt:formatNumber value="${o.amount}" type="currency" currencySymbol="₫"/>
                                     </td>
                                     <td>
                                         <c:choose>
@@ -50,8 +58,8 @@
                                         </c:choose>
                                     </td>
                                     <td>
-                                        <a href="<c:url value='/order/detail?id=${o.orderId}'/>" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-eye"></i> Xem
+                                        <a href="<c:url value='/order/detail?id=${o.orderId}'/>" class="btn btn-sm btn-primary rounded-custom">
+                                            <i class="fas fa-eye me-1"></i>Xem
                                         </a>
                                     </td>
                                 </tr>

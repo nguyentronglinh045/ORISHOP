@@ -13,8 +13,10 @@
     <div class="row">
         <!-- Thông tin đơn hàng -->
         <div class="col-md-12 mb-4">
-            <div class="card">
-                <div class="card-header bg-light fw-bold">Thông tin nhận hàng</div>
+            <div class="card shadow-custom">
+                <div class="card-header fw-bold">
+                    <i class="fas fa-info-circle me-2"></i>Thông tin nhận hàng
+                </div>
                 <div class="card-body">
                     <p class="mb-1"><strong>Người nhận:</strong> ${order.user.fullname}</p>
                     <p class="mb-1"><strong>Số điện thoại:</strong> ${order.phone}</p>
@@ -29,8 +31,10 @@
 
         <!-- Danh sách sản phẩm -->
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-light fw-bold">Sản phẩm đã mua</div>
+            <div class="card shadow-custom">
+                <div class="card-header fw-bold">
+                    <i class="fas fa-shopping-bag me-2"></i>Sản phẩm đã mua
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered mb-0">
                         <thead class="table-light">
@@ -46,21 +50,26 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <c:if test="${not empty d.product.image}">
-                                                <img src="<c:url value='/assets/uploads/product/${d.product.image}'/>" width="50" class="img-thumbnail me-2">
-                                            </c:if>
+                                            <c:choose>
+                                                <c:when test="${not empty d.product.image}">
+                                                    <img src="<c:url value='/assets/uploads/product/${d.product.image}'/>" width="60" height="60" class="img-thumbnail rounded-custom me-3" style="object-fit: cover;">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="https://placehold.co/60x60/fff5f8/ff6b9d?text=Thumb" width="60" height="60" class="img-thumbnail rounded-custom me-3" style="object-fit: cover;">
+                                                </c:otherwise>
+                                            </c:choose>
                                             ${d.product.productName}
                                         </div>
                                     </td>
-                                    <td><fmt:formatNumber value="${d.unitPrice}" type="currency" currencySymbol="đ"/></td>
+                                    <td><fmt:formatNumber value="${d.unitPrice}" type="currency" currencySymbol="₫"/></td>
                                     <td>${d.quantity}</td>
-                                    <td class="fw-bold"><fmt:formatNumber value="${d.unitPrice * d.quantity}" type="currency" currencySymbol="đ"/></td>
+                                    <td class="fw-bold"><fmt:formatNumber value="${d.unitPrice * d.quantity}" type="currency" currencySymbol="₫"/></td>
                                 </tr>
                             </c:forEach>
                             <tr class="table-light">
                                 <td colspan="3" class="text-end fw-bold">Tổng cộng:</td>
-                                <td class="text-danger fw-bold fs-5">
-                                    <fmt:formatNumber value="${order.amount}" type="currency" currencySymbol="đ"/>
+                                <td class="text-primary fw-bold fs-5">
+                                    <fmt:formatNumber value="${order.amount}" type="currency" currencySymbol="₫"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -68,7 +77,9 @@
                 </div>
             </div>
             <div class="mt-3">
-                <a href="<c:url value='/order/history'/>" class="btn btn-secondary">Quay lại danh sách</a>
+                <a href="<c:url value='/order/history'/>" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+                </a>
             </div>
         </div>
     </div>
