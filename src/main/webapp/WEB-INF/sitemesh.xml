@@ -6,17 +6,15 @@
         <tag-rule-bundle class="org.sitemesh.content.tagrules.html.DivExtractingTagRuleBundle"/>
     </content-processor>
     
-    <!-- 1. Cấu hình ngoại lệ TRƯỚC (Không ốp layout) - Phải đặt trước các mapping khác -->
-    <!-- Các file tĩnh (css, js, ảnh) hoặc API không cần trang trí giao diện -->
+    <!-- Default decorator prefix is /WEB-INF/decorators/ so we just use filename -->
+    
+    <!-- 1. Cấu hình ngoại lệ TRƯỚC (Không ốp layout) -->
     <mapping path="/assets/*" exclude="true"/>
-    <mapping path="/assets/lib/*" exclude="true"/>
     <mapping path="/api/*" exclude="true"/>
     
-    <!-- 2. Cấu hình Layout cho trang Quản trị (Admin) -->
-    <!-- Bất kỳ URL nào bắt đầu bằng /admin/ sẽ dùng giao diện admin.jsp -->
-    <mapping path="/admin/*" decorator="/WEB-INF/decorators/admin.jsp"/>
+    <!-- 2. Layout cho trang Quản trị (Admin) -->
+    <mapping path="/admin/*" decorator="admin.jsp"/>
 
-    <!-- 3. Cấu hình Layout cho trang Người dùng (Web) -->
-    <!-- Tất cả các URL còn lại sẽ dùng giao diện web.jsp -->
-    <mapping path="/*" decorator="/WEB-INF/decorators/web.jsp"/>
+    <!-- 3. Layout cho trang Người dùng (Web) - default -->
+    <mapping path="/*" decorator="web.jsp"/>
 </sitemesh>
