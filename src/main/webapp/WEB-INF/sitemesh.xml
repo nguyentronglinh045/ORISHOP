@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemesh>
-    <!-- 1. Cấu hình Layout cho trang Quản trị (Admin) -->
-    <!-- Bất kỳ URL nào bắt đầu bằng /admin/ sẽ dùng giao diện admin.jsp -->
-    <mapping path="/admin/*" decorator="/WEB-INF/decorators/admin.jsp"/>
-
-    <!-- 2. Cấu hình ngoại lệ (Không ốp layout) -->
+    <!-- Content Processors - Parse HTML content -->
+    <content-processor>
+        <tag-rule-bundle class="org.sitemesh.content.tagrules.html.CoreHtmlTagRuleBundle"/>
+        <tag-rule-bundle class="org.sitemesh.content.tagrules.html.DivExtractingTagRuleBundle"/>
+    </content-processor>
+    
+    <!-- 1. Cấu hình ngoại lệ TRƯỚC (Không ốp layout) - Phải đặt trước các mapping khác -->
     <!-- Các file tĩnh (css, js, ảnh) hoặc API không cần trang trí giao diện -->
     <mapping path="/assets/*" exclude="true"/>
+    <mapping path="/assets/lib/*" exclude="true"/>
     <mapping path="/api/*" exclude="true"/>
+    
+    <!-- 2. Cấu hình Layout cho trang Quản trị (Admin) -->
+    <!-- Bất kỳ URL nào bắt đầu bằng /admin/ sẽ dùng giao diện admin.jsp -->
+    <mapping path="/admin/*" decorator="/WEB-INF/decorators/admin.jsp"/>
 
     <!-- 3. Cấu hình Layout cho trang Người dùng (Web) -->
     <!-- Tất cả các URL còn lại sẽ dùng giao diện web.jsp -->
