@@ -1,6 +1,7 @@
 package vn.orishop.services;
 
 import java.util.List;
+
 import vn.orishop.entity.Category;
 
 public interface ICategoryService {
@@ -10,4 +11,7 @@ public interface ICategoryService {
     Category findById(int id);
     List<Category> findAll();
     List<Category> findByName(String keyword);
+    
+    // Lấy danh mục gốc (không có danh mục cha)
+    List<Category> findRootCategories();
 }

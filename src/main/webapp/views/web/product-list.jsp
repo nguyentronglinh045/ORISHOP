@@ -62,19 +62,57 @@
                                                 <span class="category-count">${fn:length(products)}</span>
                                             </a>
                                             <c:forEach items="${categories}" var="c">
-                                                <a href="<c:url value='/product/category?cid=${c.categoryId}'/>"
-                                                    class="category-item ${activeCate == c.categoryId ? 'active' : ''}">
-                                                    <c:choose>
-                                                        <c:when test="${not empty c.icon}">
-                                                            <img src="<c:url value='/assets/uploads/category/${c.icon}'/>"
-                                                                alt="${c.categoryName}">
+                                                <c:choose>
+                                                    <%-- Category có danh mục con --%>
+                                                        <c:when test="${not empty c.subCategories}">
+                                                            <div
+                                                                class="category-parent ${activeCate == c.categoryId || activeParentCate == c.categoryId ? 'open' : ''}">
+                                                                <div class="category-parent-link ${activeCate == c.categoryId ? 'active' : ''}"
+                                                                    onclick="toggleSubCategory(this)">
+                                                                    <c:choose>
+                                                                        <c:when test="${not empty c.icon}">
+                                                                            <img src="<c:url value='/assets/uploads/category/${c.icon}'/>"
+                                                                                alt="${c.categoryName}">
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <i class="fas fa-folder"></i>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                    <span>${c.categoryName}</span>
+                                                                    <i
+                                                                        class="fas fa-chevron-down category-toggle-icon"></i>
+                                                                </div>
+                                                                <div class="subcategory-list">
+                                                                    <a href="<c:url value='/product/category?cid=${c.categoryId}'/>"
+                                                                        class="subcategory-item ${activeCate == c.categoryId ? 'active' : ''}">
+                                                                        Tất cả ${c.categoryName}
+                                                                    </a>
+                                                                    <c:forEach items="${c.subCategories}" var="sub">
+                                                                        <a href="<c:url value='/product/category?cid=${sub.categoryId}'/>"
+                                                                            class="subcategory-item ${activeCate == sub.categoryId ? 'active' : ''}">
+                                                                            ${sub.categoryName}
+                                                                        </a>
+                                                                    </c:forEach>
+                                                                </div>
+                                                            </div>
                                                         </c:when>
-                                                        <c:otherwise>
-                                                            <i class="fas fa-folder"></i>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                    <span>${c.categoryName}</span>
-                                                </a>
+                                                        <%-- Category không có danh mục con --%>
+                                                            <c:otherwise>
+                                                                <a href="<c:url value='/product/category?cid=${c.categoryId}'/>"
+                                                                    class="category-item ${activeCate == c.categoryId ? 'active' : ''}">
+                                                                    <c:choose>
+                                                                        <c:when test="${not empty c.icon}">
+                                                                            <img src="<c:url value='/assets/uploads/category/${c.icon}'/>"
+                                                                                alt="${c.categoryName}">
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <i class="fas fa-folder"></i>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                    <span>${c.categoryName}</span>
+                                                                </a>
+                                                            </c:otherwise>
+                                                </c:choose>
                                             </c:forEach>
                                         </div>
                                     </div>
@@ -190,5 +228,10 @@
                         function toggleCategory() {
                             const categoryCard = document.getElementById('categoryCard');
                             categoryCard.classList.toggle('show');
+                        }
+
+                        function toggleSubCategory(element) {
+                            const parent = element.closest('.category-parent');
+                            parent.classList.toggle('open');
                         }
                     </script>

@@ -159,6 +159,111 @@
       font-weight: 600;
     }
 
+    
+    .category-parent {
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .category-parent:last-child {
+      border-bottom: none;
+    }
+
+    .category-parent-link {
+      display: flex;
+      align-items: center;
+      padding: 0.875rem 1.5rem;
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+    }
+
+    .category-parent-link:hover {
+      background: linear-gradient(135deg, #fff5f8, #ffd1dc);
+      color: var(--primary);
+      border-left-color: var(--primary);
+    }
+
+    .category-parent-link.active {
+      background: linear-gradient(135deg, #fff5f8, #ffd1dc);
+      color: var(--primary);
+      border-left-color: var(--primary);
+    }
+
+    .category-parent-link img {
+      width: 24px;
+      height: 24px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-right: 0.75rem;
+    }
+
+    .category-parent-link i {
+      margin-right: 0.75rem;
+      width: 24px;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .category-toggle-icon {
+      margin-left: auto;
+      transition: transform 0.3s ease;
+      font-size: 0.8rem;
+      color: var(--dark-light);
+    }
+
+    .category-parent.open .category-toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Subcategories */
+    .subcategory-list {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: #fafafa;
+    }
+
+    .category-parent.open .subcategory-list {
+      max-height: 500px;
+    }
+
+    .subcategory-item {
+      display: flex;
+      align-items: center;
+      padding: 0.65rem 1.5rem 0.65rem 3rem;
+      color: var(--dark-light);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .subcategory-item:hover {
+      background: linear-gradient(135deg, #fff5f8, #ffeef3);
+      color: var(--primary);
+      border-left-color: var(--secondary);
+    }
+
+    .subcategory-item.active {
+      background: linear-gradient(135deg, #fff5f8, #ffeef3);
+      color: var(--primary);
+      border-left-color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .subcategory-item::before {
+      content: '\f105';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      margin-right: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--primary);
+    }
+
     /* Product Grid */
     .products-header {
       display: flex;

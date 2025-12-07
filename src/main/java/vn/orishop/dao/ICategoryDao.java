@@ -1,6 +1,7 @@
 package vn.orishop.dao;
 
 import java.util.List;
+
 import vn.orishop.entity.Category;
 
 public interface ICategoryDao {
@@ -13,4 +14,7 @@ public interface ICategoryDao {
     
     // Hàm riêng của Category
     List<Category> findByName(String keyword);
+    
+    // Lấy danh mục gốc (không có danh mục cha)
+    List<Category> findRootCategories();
 }
