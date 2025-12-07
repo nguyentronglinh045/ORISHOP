@@ -426,6 +426,15 @@
                     text-decoration: none;
                 }
 
+            
+                footer .text-muted {
+                    color: #adb5bd !important;
+                }
+
+                footer p {
+                    color: #adb5bd;
+                }
+
                 .social-icon {
                     display: inline-flex;
                     width: 42px;
