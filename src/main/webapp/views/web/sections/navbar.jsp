@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<!-- 1. TOP BAR -->
 <div class="top-bar">
     <div class="container d-flex justify-content-between align-items-center">
         <span><i class="fas fa-truck me-2"></i>Miễn phí vận chuyển đơn từ 500K</span>
@@ -13,18 +12,15 @@
     </div>
 </div>
 
-<!-- 2. HEADER CHÍNH -->
 <header class="main-header">
     <div class="container">
         <div class="row align-items-center">
-            <!-- Logo -->
             <div class="col-md-3 col-6">
                 <a href="<c:url value='/home'/>" class="brand-logo">
                     <i class="fas fa-shopping-bag"></i> ORISHOP
                 </a>
             </div>
 
-            <!-- Search Bar (Ẩn trên mobile, hiện trên desktop) -->
             <div class="col-md-5 d-none d-md-block">
                 <form action="<c:url value='/product/search'/>" class="search-container">
                     <input type="text" class="search-input" name="keyword" placeholder="Bạn đang tìm sản phẩm gì..." value="${param.keyword}">
@@ -34,10 +30,8 @@
                 </form>
             </div>
 
-            <!-- Actions -->
             <div class="col-md-4 col-6">
                 <div class="header-actions justify-content-end">
-                    <!-- Account -->
                     <c:if test="${sessionScope.account == null}">
                         <a href="<c:url value='/login'/>" class="action-btn" title="Đăng nhập">
                             <i class="far fa-user"></i>
@@ -46,10 +40,10 @@
 
                     <c:if test="${sessionScope.account != null}">
                         <div class="dropdown">
-                            <a href="#" class="action-btn" data-bs-toggle="dropdown" title="Tài khoản">
+                            <a href="#" class="action-btn" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Tài khoản">
                                 <i class="fas fa-user-circle text-danger"></i>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><span class="dropdown-item-text fw-bold text-muted">Xin chào, ${sessionScope.account.fullname}</span></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <c:if test="${sessionScope.account.role == 1}">
@@ -61,13 +55,11 @@
                         </div>
                     </c:if>
 
-                    <!-- Cart -->
                     <a href="<c:url value='/cart'/>" class="action-btn" title="Giỏ hàng">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-badge">${sessionScope.cart != null ? sessionScope.cart.size() : 0}</span>
                     </a>
 
-                    <!-- Mobile Menu Button -->
                     <button class="btn d-md-none border-0 p-0 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
                         <i class="fas fa-bars fa-lg"></i>
                     </button>
@@ -75,16 +67,16 @@
             </div>
         </div>
 
-        <!-- 3. NAVIGATION MENU -->
         <ul class="nav justify-content-center navbar-custom">
             <li class="nav-item">
                 <a class="nav-link active" href="<c:url value='/home'/>">Trang chủ</a>
             </li>
 
-            <!-- Menu Đa cấp -->
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Sản phẩm</a>
-                <ul class="dropdown-menu">
+                <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sản phẩm
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="productDropdown">
                     <li><a class="dropdown-item fw-bold" href="<c:url value='/product'/>">Tất cả sản phẩm</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <c:forEach items="${categories}" var="cate">
@@ -95,7 +87,6 @@
                                         <a class="dropdown-item has-child" href="<c:url value='/product/category?cid=${cate.categoryId}'/>">
                                             ${cate.categoryName}
                                         </a>
-                                        <!-- Submenu -->
                                         <ul class="submenu">
                                             <c:forEach items="${cate.subCategories}" var="sub">
                                                 <li><a class="dropdown-item" href="<c:url value='/product/category?cid=${sub.categoryId}'/>">${sub.categoryName}</a></li>
@@ -121,7 +112,6 @@
     </div>
 </header>
 
-<!-- Mobile Menu Offcanvas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileMenu">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Menu</h5>
@@ -150,4 +140,3 @@
         </ul>
     </div>
 </div>
-
