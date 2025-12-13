@@ -107,11 +107,12 @@
                                                             </span>
                                                         </td>
                                                         <td>
-                                                            <a href="<c:url value='/cart/remove?pid=${item.productId}'/>"
-                                                                class="btn-remove"
-                                                                onclick="return confirm('Xóa sản phẩm này khỏi giỏ?');">
+                                                            <button type="button" class="btn-remove"
+                                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                                data-product-id="${item.productId}"
+                                                                data-product-name="${item.productName}">
                                                                 <i class="fas fa-trash-alt"></i>
-                                                            </a>
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
@@ -157,10 +158,11 @@
                                                     <fmt:formatNumber value="${item.totalPrice}" type="currency"
                                                         currencySymbol="₫" />
                                                 </span>
-                                                <a href="<c:url value='/cart/remove?pid=${item.productId}'/>"
-                                                    class="btn-remove" onclick="return confirm('Xóa sản phẩm này?');">
+                                                <button type="button" class="btn-remove" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal" data-product-id="${item.productId}"
+                                                    data-product-name="${item.productName}">
                                                     <i class="fas fa-trash-alt"></i>
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -209,3 +211,54 @@
                         </div>
                     </c:if>
                 </div>
+
+                <!-- Delete Confirmation Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header border-0 pb-0">
+                                <h5 class="modal-title text-dark w-100" id="deleteModalLabel">
+                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Xác nhận xóa sản phẩm
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center py-3">
+                                <p class="mb-0 text-dark">Bạn có muốn xóa sản phẩm</p>
+                                <p class="fw-bold text-primary mb-0 mt-1" id="productNameToDelete"></p>
+                                <p class="mb-0 text-dark mt-1">khỏi giỏ hàng không?</p>
+                            </div>
+                            <div class="modal-footer border-0 d-flex justify-content-center gap-3 pt-0">
+                                <button type="button"
+                                    class="btn btn-secondary d-flex align-items-center justify-content-center"
+                                    data-bs-dismiss="modal" style="min-width: 120px; height: 42px;">
+                                    <i class="fas fa-times me-2"></i>Hủy
+                                </button>
+                                <a href="#" id="confirmDeleteBtn"
+                                    class="btn btn-danger d-flex align-items-center justify-content-center"
+                                    style="min-width: 120px; height: 42px;">
+                                    <i class="fas fa-trash-alt me-2"></i>Xóa
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // Handle delete modal
+                    const deleteModal = document.getElementById('deleteModal');
+                    if (deleteModal) {
+                        deleteModal.addEventListener('show.bs.modal', function (event) {
+                            const button = event.relatedTarget;
+                            const productId = button.getAttribute('data-product-id');
+                            const productName = button.getAttribute('data-product-name');
+
+                            const productNameElement = document.getElementById('productNameToDelete');
+                            const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+                            productNameElement.textContent = productName;
+                            confirmBtn.href = '${pageContext.request.contextPath}/cart/remove?pid=' + productId;
+                        });
+                    }
+                </script>
