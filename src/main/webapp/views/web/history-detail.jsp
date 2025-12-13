@@ -1,75 +1,168 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+        <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
-<div class="container mt-5 mb-5">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<c:url value='/order/history'/>">Lịch sử đơn hàng</a></li>
-            <li class="breadcrumb-item active">Chi tiết đơn hàng #${order.orderId}</li>
-        </ol>
-    </nav>
+            <%@ include file="sections/styles/history-detail-styles.jsp" %>
 
-    <div class="row">
-        <!-- Thông tin đơn hàng -->
-        <div class="col-md-12 mb-4">
-            <div class="card">
-                <div class="card-header bg-light fw-bold">Thông tin nhận hàng</div>
-                <div class="card-body">
-                    <p class="mb-1"><strong>Người nhận:</strong> ${order.user.fullname}</p>
-                    <p class="mb-1"><strong>Số điện thoại:</strong> ${order.phone}</p>
-                    <p class="mb-1"><strong>Địa chỉ:</strong> ${order.address}</p>
-                    <p class="mb-1"><strong>Ngày đặt:</strong> <fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy HH:mm"/></p>
-                    <p class="mb-0"><strong>Trạng thái:</strong> 
-                        <span class="badge bg-info text-dark">${order.status}</span>
-                    </p>
-                </div>
-            </div>
-        </div>
+                <!-- Hero Section -->
+                <section class="detail-hero">
+                    <div class="container">
+                        <div class="detail-hero-content">
+                            <h1><i class="fas fa-receipt me-2"></i>Chi tiết đơn hàng</h1>
+                            <div class="detail-breadcrumb">
+                                <a href="<c:url value='/'/>"><i class="fas fa-home me-1"></i>Trang chủ</a>
+                                <span>/</span>
+                                <a href="<c:url value='/order/history'/>">Đơn hàng của tôi</a>
+                                <span>/</span>
+                                <span>Đơn hàng #${order.orderId}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-        <!-- Danh sách sản phẩm -->
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-light fw-bold">Sản phẩm đã mua</div>
-                <div class="table-responsive">
-                    <table class="table table-bordered mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Sản phẩm</th>
-                                <th>Đơn giá</th>
-                                <th>Số lượng</th>
-                                <th>Thành tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${details}" var="d">
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <c:if test="${not empty d.product.image}">
-                                                <img src="<c:url value='/assets/uploads/product/${d.product.image}'/>" width="50" class="img-thumbnail me-2">
-                                            </c:if>
-                                            ${d.product.productName}
+                <!-- Main Content -->
+                <div class="container py-4">
+                    <div class="row">
+                        <!-- Order Info -->
+                        <div class="col-lg-12">
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <h4 class="info-card-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Thông tin đơn hàng #${order.orderId}
+                                    </h4>
+                                    <c:choose>
+                                        <c:when test="${order.status == 'Chờ xử lý'}">
+                                            <span class="status-badge status-pending">
+                                                <i class="fas fa-clock"></i>Chờ xử lý
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${order.status == 'Đang giao'}">
+                                            <span class="status-badge status-shipping">
+                                                <i class="fas fa-truck"></i>Đang giao
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${order.status == 'Đã giao'}">
+                                            <span class="status-badge status-delivered">
+                                                <i class="fas fa-check-circle"></i>Đã giao
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${order.status == 'Đã hủy'}">
+                                            <span class="status-badge status-cancelled">
+                                                <i class="fas fa-times-circle"></i>Đã hủy
+                                            </span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-badge status-default">
+                                                <i class="fas fa-info-circle"></i>${order.status}
+                                            </span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div class="info-card-body">
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <div class="info-icon">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="info-content">
+                                                <div class="info-label">Người nhận</div>
+                                                <div class="info-value">${order.user.fullname}</div>
+                                            </div>
                                         </div>
-                                    </td>
-                                    <td><fmt:formatNumber value="${d.unitPrice}" type="currency" currencySymbol="đ"/></td>
-                                    <td>${d.quantity}</td>
-                                    <td class="fw-bold"><fmt:formatNumber value="${d.unitPrice * d.quantity}" type="currency" currencySymbol="đ"/></td>
-                                </tr>
-                            </c:forEach>
-                            <tr class="table-light">
-                                <td colspan="3" class="text-end fw-bold">Tổng cộng:</td>
-                                <td class="text-danger fw-bold fs-5">
-                                    <fmt:formatNumber value="${order.amount}" type="currency" currencySymbol="đ"/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                        <div class="info-item">
+                                            <div class="info-icon">
+                                                <i class="fas fa-phone"></i>
+                                            </div>
+                                            <div class="info-content">
+                                                <div class="info-label">Số điện thoại</div>
+                                                <div class="info-value">${order.phone}</div>
+                                            </div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-icon">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </div>
+                                            <div class="info-content">
+                                                <div class="info-label">Địa chỉ giao hàng</div>
+                                                <div class="info-value">${order.address}</div>
+                                            </div>
+                                        </div>
+                                        <div class="info-item">
+                                            <div class="info-icon">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </div>
+                                            <div class="info-content">
+                                                <div class="info-label">Ngày đặt hàng</div>
+                                                <div class="info-value">
+                                                    <fmt:formatDate value="${order.orderDate}"
+                                                        pattern="dd/MM/yyyy HH:mm" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Products -->
+                        <div class="col-lg-12">
+                            <div class="products-card">
+                                <div class="products-header">
+                                    <h4 class="products-title">
+                                        <i class="fas fa-shopping-bag"></i>
+                                        Sản phẩm đã mua
+                                    </h4>
+                                </div>
+                                <div class="product-list">
+                                    <c:forEach items="${details}" var="d">
+                                        <div class="product-item">
+                                            <div class="product-image">
+                                                <c:choose>
+                                                    <c:when test="${not empty d.product.image}">
+                                                        <img src="<c:url value='/assets/uploads/product/${d.product.image}'/>"
+                                                            alt="${d.product.productName}">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="https://placehold.co/80x80/fff5f8/ff6b9d?text=Ảnh"
+                                                            alt="No image">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                            <div class="product-info">
+                                                <div class="product-name">${d.product.productName}</div>
+                                                <div class="product-price">
+                                                    <fmt:formatNumber value="${d.unitPrice}" type="currency"
+                                                        currencySymbol="₫" maxFractionDigits="0" />
+                                                </div>
+                                            </div>
+                                            <div class="product-qty">
+                                                <div class="product-qty-label">Số lượng</div>
+                                                <div class="product-qty-value">x${d.quantity}</div>
+                                            </div>
+                                            <div class="product-subtotal">
+                                                <div class="subtotal-label">Thành tiền</div>
+                                                <div class="subtotal-value">
+                                                    <fmt:formatNumber value="${d.unitPrice * d.quantity}"
+                                                        type="currency" currencySymbol="₫" maxFractionDigits="0" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                                <div class="total-row">
+                                    <span class="total-label">Tổng cộng:</span>
+                                    <span class="total-value">
+                                        <fmt:formatNumber value="${order.amount}" type="currency" currencySymbol="₫"
+                                            maxFractionDigits="0" />
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Back Button -->
+                            <a href="<c:url value='/order/history'/>" class="btn-back">
+                                <i class="fas fa-arrow-left"></i>Quay lại danh sách
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="mt-3">
-                <a href="<c:url value='/order/history'/>" class="btn btn-secondary">Quay lại danh sách</a>
-            </div>
-        </div>
-    </div>
-</div>

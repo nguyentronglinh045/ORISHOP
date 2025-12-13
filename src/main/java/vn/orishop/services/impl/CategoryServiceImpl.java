@@ -74,4 +74,9 @@ public class CategoryServiceImpl implements ICategoryService {
     public List<Category> findByName(String keyword) {
         return categoryDao.findByName(keyword);
     }
+    
+    @Override
+    public List<Category> findRootCategories() {
+        return categoryDao.findRootCategories();
+    }
 }

@@ -8,7 +8,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import vn.orishop.entity.Category;
 import vn.orishop.entity.Product;
 import vn.orishop.services.ICategoryService;
@@ -31,8 +30,8 @@ public class ProductWebController extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
-        // 1. Luôn lấy danh sách Category để hiển thị Sidebar/Menu lọc
-        List<Category> listCategories = categoryService.findAll();
+        
+        List<Category> listCategories = categoryService.findRootCategories();
         req.setAttribute("categories", listCategories);
 
         // 2. Điều hướng xử lý

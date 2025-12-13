@@ -1,0 +1,333 @@
+/* ============================================
+   ORISHOP THEME - Rose Gold / Pink Playful
+   ============================================ */
+
+/* === CSS VARIABLES === */
+:root {
+    /* Primary Colors - Rose Gold / Pink */
+    --primary: #ff6b9d;
+    --primary-dark: #e84a7f;
+    --primary-light: #ffb6c1;
+    --secondary: #ffd1dc;
+    --accent: #ffb6c1;
+    --gold: #d4a574;
+    
+    /* Neutral Colors */
+    --dark: #2d3436;
+    --dark-light: #636e72;
+    --light: #fff5f8;
+    --light-gray: #f8f9fa;
+    --white: #ffffff;
+    --border: #e9ecef;
+    
+    /* Status Colors */
+    --success: #00b894;
+    --warning: #fdcb6e;
+    --danger: #e74c3c;
+    --info: #74b9ff;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #ff6b9d, #ffb6c1);
+    --gradient-gold: linear-gradient(135deg, #d4a574, #ffb6c1);
+    --gradient-light: linear-gradient(135deg, #fff5f8, #ffd1dc);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(255, 107, 157, 0.1);
+    --shadow-md: 0 4px 16px rgba(255, 107, 157, 0.15);
+    --shadow-lg: 0 8px 32px rgba(255, 107, 157, 0.2);
+    --shadow-hover: 0 12px 40px rgba(255, 107, 157, 0.25);
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 15px;
+    --radius-lg: 25px;
+    --radius-full: 50px;
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* === TYPOGRAPHY === */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--dark);
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+/* === BUTTONS === */
+.btn-primary,
+.btn-danger {
+    background: var(--gradient-primary);
+    border: none;
+    color: var(--white);
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover,
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    background: var(--gradient-primary);
+    color: var(--white);
+}
+
+.btn-outline-primary,
+.btn-outline-danger {
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+    font-weight: 600;
+    padding: 10px 28px;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-base);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-danger:hover {
+    background: var(--gradient-primary);
+    border-color: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.btn-lg {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+}
+
+.btn-sm {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+}
+
+/* === CARDS === */
+.card {
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    background: var(--gradient-primary);
+    color: var(--white);
+    border: none;
+    font-weight: 600;
+    padding: 15px 20px;
+}
+
+/* === BADGES === */
+.badge {
+    padding: 6px 15px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.badge-primary,
+.bg-primary {
+    background: var(--gradient-primary) !important;
+    color: var(--white);
+}
+
+.badge-success,
+.bg-success {
+    background: var(--success) !important;
+}
+
+.badge-warning,
+.bg-warning {
+    background: var(--warning) !important;
+    color: var(--dark);
+}
+
+.badge-danger,
+.bg-danger {
+    background: var(--danger) !important;
+}
+
+/* === FORMS === */
+.form-control,
+.form-select {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 15px;
+    transition: all var(--transition-base);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 157, 0.15);
+    outline: none;
+}
+
+.form-floating label {
+    color: var(--dark-light);
+}
+
+/* === ALERTS === */
+.alert {
+    border-radius: var(--radius-md);
+    border: none;
+    padding: 15px 20px;
+}
+
+.alert-success {
+    background: rgba(0, 184, 148, 0.1);
+    color: var(--success);
+}
+
+.alert-danger {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--danger);
+}
+
+.alert-warning {
+    background: rgba(253, 203, 110, 0.1);
+    color: #d63031;
+}
+
+.alert-info {
+    background: rgba(116, 185, 255, 0.1);
+    color: var(--info);
+}
+
+/* === TABLES === */
+.table {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.table thead {
+    background: var(--gradient-primary);
+    color: var(--white);
+}
+
+.table tbody tr {
+    transition: all var(--transition-fast);
+}
+
+.table tbody tr:hover {
+    background: var(--light);
+    transform: scale(1.01);
+}
+
+/* === UTILITY CLASSES === */
+.text-primary {
+    color: var(--primary) !important;
+}
+
+.bg-primary {
+    background: var(--gradient-primary) !important;
+}
+
+.bg-light-custom {
+    background: var(--light) !important;
+}
+
+.rounded-custom {
+    border-radius: var(--radius-md) !important;
+}
+
+.shadow-custom {
+    box-shadow: var(--shadow-md) !important;
+}
+
+.shadow-hover {
+    transition: all var(--transition-base);
+}
+
+.shadow-hover:hover {
+    box-shadow: var(--shadow-hover) !important;
+    transform: translateY(-3px);
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease;
+}
+
+.animate-slideIn {
+    animation: slideIn 0.5s ease;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    
+    .btn-lg {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+}
+
