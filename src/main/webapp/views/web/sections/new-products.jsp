@@ -64,8 +64,8 @@
                                     <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫" />
                                 </span>
                             </div>
-                            <a href="<c:url value='/cart/add?pid=${p.productId}'/>" class="btn btn-add-cart">
-                                <i class="fas fa-shopping-cart me-2"></i>Xem Chi Tiết
+                            <a href="<c:url value='/product/detail?id=${p.productId}'/>" class="btn btn-add-cart">
+                                <i class="fas fa-eye me-2"></i>Xem Chi Tiết
                             </a>
                         </div>
                     </div>
