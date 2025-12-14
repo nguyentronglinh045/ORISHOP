@@ -1,10 +1,13 @@
 package vn.orishop.controllers.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -83,7 +86,13 @@ public class ProductWebController extends HttpServlet {
             Product product = productService.findById(Integer.parseInt(id));
             req.setAttribute("product", product);
             
-            // Gợi ý: Lấy thêm sản phẩm liên quan (cùng category)
+            // --- 1. XỬ LÝ HÀNG ĐÃ XEM (New Logic) ---
+            String recentIds = updateRecentViewedCookie(req, resp, id);
+            List<Product> recentProducts = getRecentProductsFromCookie(recentIds);
+            req.setAttribute("recentProducts", recentProducts);
+            // ----------------------------------------
+            
+            // 2. Lấy thêm sản phẩm liên quan (cùng category)
             if (product.getCategory() != null) {
                  List<Product> relatedProducts = productService.findByCategoryId(product.getCategory().getCategoryId());
                  req.setAttribute("relatedProducts", relatedProducts);
@@ -99,7 +108,6 @@ public class ProductWebController extends HttpServlet {
     private void searchProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String keyword = req.getParameter("keyword");
         if (keyword != null && !keyword.isEmpty()) {
-            // SỬA LỖI DÒNG 102: Đổi từ search() thành findByName() cho đúng với Service
             List<Product> list = productService.findByName(keyword);
             
             req.setAttribute("products", list);
@@ -109,5 +117,81 @@ public class ProductWebController extends HttpServlet {
             return;
         }
         req.getRequestDispatcher("/views/web/product-list.jsp").forward(req, resp);
+    }
+
+    // ==========================================
+    // CÁC HÀM HỖ TRỢ XỬ LÝ COOKIE HÀNG ĐÃ XEM
+    // ==========================================
+
+    /**
+     * Cập nhật danh sách ID sản phẩm đã xem vào Cookie
+     * Logic: Thêm ID mới vào đầu, xóa ID trùng, giữ tối đa 6 sản phẩm
+     */
+    private String updateRecentViewedCookie(HttpServletRequest req, HttpServletResponse resp, String currentId) {
+        String txt = "";
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals("recent_viewed")) {
+                    txt = c.getValue();
+                    break;
+                }
+            }
+        }
+
+        // Dùng LinkedList để dễ thêm vào đầu và xóa cuối
+        LinkedList<String> ids = new LinkedList<>();
+        if (!txt.isEmpty()) {
+            String[] arr = txt.split("-");
+            for (String s : arr) {
+                if (!s.equals(currentId)) { // Nếu trùng ID hiện tại thì không thêm (để lát add vào đầu)
+                    ids.add(s);
+                }
+            }
+        }
+        
+        // Đưa ID hiện tại lên đầu danh sách
+        ids.addFirst(currentId);
+        
+        // Giới hạn chỉ lưu 6 sản phẩm gần nhất
+        while (ids.size() > 6) {
+            ids.removeLast();
+        }
+
+        // Tạo chuỗi mới để lưu vào Cookie (dạng: id1-id2-id3)
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ids.size(); i++) {
+            sb.append(ids.get(i));
+            if (i < ids.size() - 1) sb.append("-");
+        }
+        
+        // Lưu Cookie (thời hạn 7 ngày)
+        Cookie c = new Cookie("recent_viewed", sb.toString());
+        c.setMaxAge(7 * 24 * 60 * 60);
+        c.setPath("/"); // Quan trọng: Để cookie có hiệu lực toàn trang web
+        resp.addCookie(c);
+        
+        return sb.toString();
+    }
+
+    /**
+     * Lấy danh sách đối tượng Product từ chuỗi ID trong Cookie
+     */
+    private List<Product> getRecentProductsFromCookie(String recentIds) {
+        List<Product> list = new ArrayList<>();
+        if (recentIds != null && !recentIds.isEmpty()) {
+            String[] arr = recentIds.split("-");
+            for (String sId : arr) {
+                try {
+                    Product p = productService.findById(Integer.parseInt(sId));
+                    if (p != null) {
+                        list.add(p);
+                    }
+                } catch (Exception e) {
+                    // Bỏ qua lỗi nếu ID không phải số hoặc không tìm thấy
+                }
+            }
+        }
+        return list;
     }
 }
