@@ -19,7 +19,8 @@ import vn.orishop.services.IUserService;
 import vn.orishop.services.impl.UserServiceImpl;
 import vn.orishop.utils.Constant;
 
-@WebServlet(urlPatterns = { "/login", "/register", "/logout", "/forgot-password" })
+// [SỬA LỖI] Đã xóa "/forgot-password" để tránh xung đột
+@WebServlet(urlPatterns = { "/login", "/register", "/logout" })
 public class AuthController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -51,9 +52,8 @@ public class AuthController extends HttpServlet {
                 }
             }
             resp.sendRedirect(req.getContextPath() + "/home");
-        } else if (url.contains("forgot-password")) {
-            req.getRequestDispatcher("/views/web/forgot-password.jsp").forward(req, resp);
-        }
+        } 
+        // [ĐÃ XÓA] Logic forgot-password cũ đã được chuyển sang Controller mới
     }
 
     @Override
@@ -124,8 +124,6 @@ public class AuthController extends HttpServlet {
 
             // Set mặc định role là User (0) và ngày tạo
             user.setRole(0); 
-            
-            // SỬA LỖI Ở ĐÂY: setCreatedDate -> setCreateDate
             user.setCreateDate(new java.util.Date());
 
             userService.insert(user);
