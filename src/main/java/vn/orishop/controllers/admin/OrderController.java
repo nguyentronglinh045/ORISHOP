@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 import vn.orishop.entity.Order;
 import vn.orishop.services.IOrderService;
 import vn.orishop.services.impl.OrderServiceImpl;
@@ -74,7 +72,7 @@ public class OrderController extends HttpServlet {
     protected void findAll(HttpServletRequest request, HttpServletResponse response) {
         try {
             // Gọi hàm findAll() trong service
-            List<Order> list = orderService.findAll();
+            List<Order> list = orderService.findAll(); //
             // Đẩy list ra view
             request.setAttribute("orders", list);
         } catch (Exception e) {
@@ -89,7 +87,7 @@ public class OrderController extends HttpServlet {
             String id = request.getParameter("id");
             
             // Gọi service tìm theo ID
-            Order order = orderService.findById(Integer.parseInt(id));
+            Order order = orderService.findById(Integer.parseInt(id)); //
             
             // Đẩy đối tượng ra view
             request.setAttribute("order", order);
@@ -99,19 +97,35 @@ public class OrderController extends HttpServlet {
         }
     }
 
+    // [CẬP NHẬT QUAN TRỌNG] Sửa logic hàm update để không làm mất thông tin User
     protected void update(HttpServletRequest request, HttpServletResponse response) {
         try {
-            // Khởi tạo đối tượng
-            Order order = new Order();
-            
-            // Map dữ liệu từ form vào entity 
-            BeanUtils.populate(order, request.getParameterMap());
+            // 1. Lấy ID từ form (đảm bảo edit.jsp có input hidden name="orderId")
+            String orderIdStr = request.getParameter("orderId");
+            int orderId = Integer.parseInt(orderIdStr);
 
-            // Gọi hàm update trong service
-            orderService.update(order);
+            // 2. Tìm đơn hàng CŨ trong database (để giữ lại thông tin User và OrderDetails)
+            Order oldOrder = orderService.findById(orderId); //
 
-            request.setAttribute("order", order);
-            request.setAttribute("message", "Cập nhật đơn hàng thành công!");
+            if (oldOrder != null) {
+                // 3. Chỉ cập nhật những thông tin thay đổi từ form Admin
+                // (Status, Address, Phone - KHÔNG dùng BeanUtils.populate để tránh ghi đè null lên User)
+                String status = request.getParameter("status");
+                String address = request.getParameter("address");
+                String phone = request.getParameter("phone");
+
+                if (status != null) oldOrder.setStatus(status);
+                if (address != null) oldOrder.setAddress(address);
+                if (phone != null) oldOrder.setPhone(phone);
+
+                // 4. Lưu lại
+                orderService.update(oldOrder); //
+
+                request.setAttribute("order", oldOrder);
+                request.setAttribute("message", "Cập nhật trạng thái đơn hàng thành công!");
+            } else {
+                request.setAttribute("error", "Không tìm thấy đơn hàng!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error: " + e.getMessage());
@@ -124,7 +138,7 @@ public class OrderController extends HttpServlet {
             String id = request.getParameter("id");
             
             // Gọi hàm delete trong service
-            orderService.delete(Integer.parseInt(id));
+            orderService.delete(Integer.parseInt(id)); //
             
             request.setAttribute("message", "Đã xóa đơn hàng thành công");
         } catch (Exception e) {
