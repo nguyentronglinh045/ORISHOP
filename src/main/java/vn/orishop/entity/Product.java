@@ -39,6 +39,10 @@ public class Product implements Serializable {
     @Column(name = "price")
     private double price;
 
+    // THÊM MỚI: Phần trăm giảm giá (ví dụ: 10, 20...)
+    @Column(name = "discount")
+    private int discount;
+
     @Column(name = "quantity")
     private int quantity;
 
@@ -49,15 +53,20 @@ public class Product implements Serializable {
     private String description;
 
     @Column(name = "active")
-    private boolean active; // Trạng thái sản phẩm (còn bán hay ngừng bán)
+    private boolean active;
 
-    // Quan hệ Many-to-One với Category: Nhiều sản phẩm thuộc một danh mục
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    // Quan hệ One-to-Many với OrderDetail: Một sản phẩm có thể xuất hiện trong nhiều đơn hàng
-    // mappedBy = "product" nghĩa là bên OrderDetail có thuộc tính tên là product
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
+    
+    // Helper method: Tính giá sau khi giảm
+    public double getDiscountPrice() {
+        if (discount > 0) {
+            return price - (price * discount / 100);
+        }
+        return price;
+    }
 }

@@ -18,6 +18,9 @@
                                     <c:when test="${p.quantity == 0}">
                                         <span class="badge-sale">Hết hàng</span>
                                     </c:when>
+                                    <c:when test="${p.discount > 0}">
+                                        <span class="badge-sale">-${p.discount}%</span>
+                                    </c:when>
                                     <c:otherwise>
                                         <span class="badge-new">NEW</span>
                                     </c:otherwise>
@@ -44,7 +47,7 @@
                                     </c:otherwise>
                                 </c:choose>
                             </a>
-                            
+                             
                         </div>
                         <div class="product-body">
                             <div class="product-category">
@@ -59,11 +62,25 @@
                                 </span>
                                 <span class="rating-count">(4.5)</span>
                             </div>
+                            
                             <div class="product-price-wrapper">
-                                <span class="product-price">
-                                    <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫" />
-                                </span>
+                                <c:choose>
+                                    <c:when test="${p.discount > 0}">
+                                        <span class="product-price text-danger">
+                                            <fmt:formatNumber value="${p.discountPrice}" type="currency" currencySymbol="₫" />
+                                        </span>
+                                        <span class="product-price-old text-muted text-decoration-line-through ms-2 small">
+                                            <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫" />
+                                        </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="product-price">
+                                            <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫" />
+                                        </span>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
+
                             <a href="<c:url value='/product/detail?id=${p.productId}'/>" class="btn btn-add-cart">
                                 <i class="fas fa-eye me-2"></i>Xem Chi Tiết
                             </a>

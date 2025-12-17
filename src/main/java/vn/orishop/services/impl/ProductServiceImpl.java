@@ -9,7 +9,6 @@ import vn.orishop.services.IProductService;
 
 public class ProductServiceImpl implements IProductService {
 
-    // Gọi DAO
     IProductDao productDao = new ProductDaoImpl();
 
     @Override
@@ -55,5 +54,11 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public int count() {
         return productDao.count();
+    }
+
+    // THÊM MỚI: Implementation
+    @Override
+    public List<Product> findPromotionalProducts() {
+        return productDao.findPromotionalProducts();
     }
 }

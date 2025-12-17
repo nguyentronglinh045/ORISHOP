@@ -18,7 +18,8 @@ import vn.orishop.services.IProductService;
 import vn.orishop.services.impl.CategoryServiceImpl;
 import vn.orishop.services.impl.ProductServiceImpl;
 
-@WebServlet(urlPatterns = { "/product", "/product/detail", "/product/category", "/product/search" })
+// Đã thêm "/product/promotion" vào urlPatterns
+@WebServlet(urlPatterns = { "/product", "/product/detail", "/product/category", "/product/search", "/product/promotion" })
 public class ProductWebController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -33,7 +34,7 @@ public class ProductWebController extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
-        
+        // Luôn load danh mục cho menu
         List<Category> listCategories = categoryService.findRootCategories();
         req.setAttribute("categories", listCategories);
 
@@ -44,6 +45,8 @@ public class ProductWebController extends HttpServlet {
             listByCategory(req, resp);
         } else if (url.contains("search")) {
             searchProduct(req, resp);
+        } else if (url.contains("promotion")) { // Xử lý khi bấm vào "Khuyến mãi"
+            listPromotionalProducts(req, resp);
         } else {
             listAll(req, resp);
         }
@@ -59,12 +62,22 @@ public class ProductWebController extends HttpServlet {
         req.getRequestDispatcher("/views/web/product-list.jsp").forward(req, resp);
     }
 
+ // Hiển thị sản phẩm khuyến mãi
+    private void listPromotionalProducts(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // GỌI HÀM MỚI: Chỉ lấy sản phẩm có discount > 0
+        List<Product> list = productService.findPromotionalProducts();
+        
+        req.setAttribute("products", list);
+        req.setAttribute("pageTitle", "Sản phẩm Khuyến mãi");
+        
+        req.getRequestDispatcher("/views/web/product-list.jsp").forward(req, resp);
+    }
+
     // Hiển thị sản phẩm theo danh mục
     private void listByCategory(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String cateId = req.getParameter("cid");
         
         if (cateId != null) {
-            // Đã sửa: Gọi đúng hàm findByCategoryId trong Service
             List<Product> list = productService.findByCategoryId(Integer.parseInt(cateId));
             
             req.setAttribute("products", list);
@@ -86,11 +99,11 @@ public class ProductWebController extends HttpServlet {
             Product product = productService.findById(Integer.parseInt(id));
             req.setAttribute("product", product);
             
-            // --- 1. XỬ LÝ HÀNG ĐÃ XEM (New Logic) ---
+            // --- 1. XỬ LÝ HÀNG ĐÃ XEM ---
             String recentIds = updateRecentViewedCookie(req, resp, id);
             List<Product> recentProducts = getRecentProductsFromCookie(recentIds);
             req.setAttribute("recentProducts", recentProducts);
-            // ----------------------------------------
+            // ----------------------------
             
             // 2. Lấy thêm sản phẩm liên quan (cùng category)
             if (product.getCategory() != null) {
@@ -123,10 +136,6 @@ public class ProductWebController extends HttpServlet {
     // CÁC HÀM HỖ TRỢ XỬ LÝ COOKIE HÀNG ĐÃ XEM
     // ==========================================
 
-    /**
-     * Cập nhật danh sách ID sản phẩm đã xem vào Cookie
-     * Logic: Thêm ID mới vào đầu, xóa ID trùng, giữ tối đa 6 sản phẩm
-     */
     private String updateRecentViewedCookie(HttpServletRequest req, HttpServletResponse resp, String currentId) {
         String txt = "";
         Cookie[] cookies = req.getCookies();
@@ -139,44 +148,36 @@ public class ProductWebController extends HttpServlet {
             }
         }
 
-        // Dùng LinkedList để dễ thêm vào đầu và xóa cuối
         LinkedList<String> ids = new LinkedList<>();
         if (!txt.isEmpty()) {
             String[] arr = txt.split("-");
             for (String s : arr) {
-                if (!s.equals(currentId)) { // Nếu trùng ID hiện tại thì không thêm (để lát add vào đầu)
+                if (!s.equals(currentId)) {
                     ids.add(s);
                 }
             }
         }
         
-        // Đưa ID hiện tại lên đầu danh sách
         ids.addFirst(currentId);
         
-        // Giới hạn chỉ lưu 6 sản phẩm gần nhất
         while (ids.size() > 6) {
             ids.removeLast();
         }
 
-        // Tạo chuỗi mới để lưu vào Cookie (dạng: id1-id2-id3)
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
             sb.append(ids.get(i));
             if (i < ids.size() - 1) sb.append("-");
         }
         
-        // Lưu Cookie (thời hạn 7 ngày)
         Cookie c = new Cookie("recent_viewed", sb.toString());
         c.setMaxAge(7 * 24 * 60 * 60);
-        c.setPath("/"); // Quan trọng: Để cookie có hiệu lực toàn trang web
+        c.setPath("/"); 
         resp.addCookie(c);
         
         return sb.toString();
     }
 
-    /**
-     * Lấy danh sách đối tượng Product từ chuỗi ID trong Cookie
-     */
     private List<Product> getRecentProductsFromCookie(String recentIds) {
         List<Product> list = new ArrayList<>();
         if (recentIds != null && !recentIds.isEmpty()) {
@@ -188,7 +189,7 @@ public class ProductWebController extends HttpServlet {
                         list.add(p);
                     }
                 } catch (Exception e) {
-                    // Bỏ qua lỗi nếu ID không phải số hoặc không tìm thấy
+                    // Bỏ qua lỗi
                 }
             }
         }

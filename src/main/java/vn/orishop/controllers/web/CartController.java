@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import vn.orishop.entity.Product;
-import vn.orishop.models.CartItem; // Bạn cần tạo class này trong package models
+import vn.orishop.models.CartItem;
 import vn.orishop.services.IProductService;
 import vn.orishop.services.impl.ProductServiceImpl;
 
@@ -77,9 +77,12 @@ public class CartController extends HttpServlet {
                 item.setProductId(product.getProductId());
                 item.setProductName(product.getProductName());
                 item.setImage(product.getImage());
-                item.setProduct(product);
+                item.setProduct(product); // Lưu giữ object product gốc để hiển thị thông tin phụ (như giá gốc)
                 item.setQuantity(1);
-                item.setUnitPrice(product.getPrice());
+                
+                // QUAN TRỌNG: Sử dụng giá sau giảm để tính tiền
+                item.setUnitPrice(product.getDiscountPrice());
+                
                 cart.put(productId, item);
             }
 

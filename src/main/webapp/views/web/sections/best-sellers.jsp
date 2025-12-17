@@ -14,7 +14,14 @@
                     <div class="product-card">
                         <div class="product-image-wrapper">
                             <div class="product-badge">
-                                <span class="badge-hot">HOT</span>
+                                <c:choose>
+                                    <c:when test="${p.discount > 0}">
+                                        <span class="badge-hot">-${p.discount}%</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="badge-hot">HOT</span>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div class="product-actions">
                                 <button class="action-btn" title="Yêu thích">
@@ -50,17 +57,37 @@
                                 </span>
                                 <span class="rating-count">(5.0)</span>
                             </div>
+
                             <div class="product-price-wrapper">
-                                <span class="product-price">
-                                    <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫" />
-                                </span>
-                                <span class="product-price-old">
-                                    <fmt:formatNumber value="${p.price * 1.3}" type="currency" currencySymbol="₫" />
-                                </span>
+                                <c:choose>
+                                    <c:when test="${p.discount > 0}">
+                                        <span class="product-price text-danger">
+                                            <fmt:formatNumber value="${p.discountPrice}" type="currency" currencySymbol="₫" />
+                                        </span>
+                                        <span class="product-price-old text-muted text-decoration-line-through ms-2 small">
+                                            <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫" />
+                                        </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="product-price">
+                                            <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫" />
+                                        </span>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
-                            <a href="<c:url value='/cart/add?pid=${p.productId}'/>" class="btn btn-add-cart">
-                                <i class="fas fa-shopping-cart me-2"></i>Thêm Vào Giỏ
-                            </a>
+                            
+                            <c:choose>
+                                <c:when test="${p.quantity > 0}">
+                                    <a href="<c:url value='/cart/add?pid=${p.productId}'/>" class="btn btn-add-cart">
+                                        <i class="fas fa-shopping-cart me-2"></i>Thêm Vào Giỏ
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <button class="btn btn-add-cart" disabled style="opacity: 0.6; cursor: not-allowed;">
+                                        <i class="fas fa-times me-2"></i>Hết Hàng
+                                    </button>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                 </div>

@@ -105,7 +105,10 @@
                 </ul>
             </li>
 
-            <li class="nav-item"><a class="nav-link" href="#">Khuyến mãi</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="<c:url value='/product/promotion'/>">Khuyến mãi</a>
+            </li>
+            
             <li class="nav-item"><a class="nav-link" href="#">Blog làm đẹp</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
         </ul>

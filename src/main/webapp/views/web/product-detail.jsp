@@ -27,11 +27,11 @@
                 <c:choose>
                     <c:when test="${not empty product.image}">
                         <img src="<c:url value='/assets/uploads/product/${product.image}'/>"
-                             class="product-main-image" alt="${product.productName}">
+                            class="product-main-image" alt="${product.productName}">
                     </c:when>
                     <c:otherwise>
                         <img src="https://placehold.co/600x600/fff5f8/ff6b9d?text=Product+Image"
-                             class="product-main-image" alt="No Image">
+                            class="product-main-image" alt="No Image">
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -64,9 +64,24 @@
 
                 <div class="product-price-section">
                     <div class="price-label">Giá bán</div>
-                    <div class="product-price">
-                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="₫" />
-                    </div>
+                    <c:choose>
+                        <c:when test="${product.discount > 0}">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="text-decoration-line-through text-muted me-2" style="font-size: 1.1rem;">
+                                    <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" />₫
+                                </span>
+                                <span class="badge bg-danger">-${product.discount}%</span>
+                            </div>
+                            <div class="product-price text-danger">
+                                <fmt:formatNumber value="${product.discountPrice}" type="number" groupingUsed="true" />₫
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="product-price">
+                                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="₫" />
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <c:if test="${not empty product.description}">
@@ -99,9 +114,8 @@
                                 <i class="fas fa-minus"></i>
                             </button>
                             <input type="number" class="qty-input" id="quantity" value="1" min="1"
-                                   max="${product.quantity}">
-                            <button type="button" class="qty-btn"
-                                    onclick="increaseQty(${product.quantity})">
+                                max="${product.quantity}">
+                            <button type="button" class="qty-btn" onclick="increaseQty(${product.quantity})">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
@@ -111,14 +125,12 @@
                 <div class="action-buttons">
                     <c:choose>
                         <c:when test="${product.quantity > 0}">
-                            <a href="<c:url value='/cart/add?pid=${product.productId}'/>"
-                               class="btn-add-to-cart">
+                            <a href="<c:url value='/cart/add?pid=${product.productId}'/>" class="btn-add-to-cart">
                                 <i class="fas fa-cart-plus me-2"></i>Thêm vào giỏ hàng
                             </a>
                         </c:when>
                         <c:otherwise>
-                            <button class="btn-add-to-cart" disabled
-                                    style="opacity: 0.6; cursor: not-allowed;">
+                            <button class="btn-add-to-cart" disabled style="opacity: 0.6; cursor: not-allowed;">
                                 <i class="fas fa-times me-2"></i>Sản phẩm tạm hết hàng
                             </button>
                         </c:otherwise>
@@ -176,11 +188,11 @@
                                         <c:choose>
                                             <c:when test="${not empty rp.image}">
                                                 <img src="<c:url value='/assets/uploads/product/${rp.image}'/>"
-                                                     class="related-image" alt="${rp.productName}">
+                                                    class="related-image" alt="${rp.productName}">
                                             </c:when>
                                             <c:otherwise>
                                                 <img src="https://placehold.co/150x150/fff5f8/ff6b9d?text=Product"
-                                                     class="related-image" alt="No Image">
+                                                    class="related-image" alt="No Image">
                                             </c:otherwise>
                                         </c:choose>
                                     </a>
@@ -190,7 +202,19 @@
                                         <a href="<c:url value='/product/detail?id=${rp.productId}'/>">${rp.productName}</a>
                                     </h6>
                                     <div class="related-price">
-                                        <fmt:formatNumber value="${rp.price}" type="currency" currencySymbol="₫" />
+                                        <c:choose>
+                                            <c:when test="${rp.discount > 0}">
+                                                <span class="text-decoration-line-through text-muted small me-1">
+                                                    <fmt:formatNumber value="${rp.price}" type="number" groupingUsed="true" />₫
+                                                </span>
+                                                <span class="text-danger fw-bold">
+                                                    <fmt:formatNumber value="${rp.discountPrice}" type="number" groupingUsed="true" />₫
+                                                </span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <fmt:formatNumber value="${rp.price}" type="currency" currencySymbol="₫" />
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </div>
                             </div>
@@ -216,11 +240,11 @@
                                         <c:choose>
                                             <c:when test="${not empty rp.image}">
                                                 <img src="<c:url value='/assets/uploads/product/${rp.image}'/>"
-                                                     class="related-image" alt="${rp.productName}">
+                                                    class="related-image" alt="${rp.productName}">
                                             </c:when>
                                             <c:otherwise>
                                                 <img src="https://placehold.co/150x150/fff5f8/ff6b9d?text=Product"
-                                                     class="related-image" alt="No Image">
+                                                    class="related-image" alt="No Image">
                                             </c:otherwise>
                                         </c:choose>
                                     </a>
@@ -230,7 +254,19 @@
                                         <a href="<c:url value='/product/detail?id=${rp.productId}'/>">${rp.productName}</a>
                                     </h6>
                                     <div class="related-price">
-                                        <fmt:formatNumber value="${rp.price}" type="currency" currencySymbol="₫" />
+                                        <c:choose>
+                                            <c:when test="${rp.discount > 0}">
+                                                <span class="text-decoration-line-through text-muted small me-1">
+                                                    <fmt:formatNumber value="${rp.price}" type="number" groupingUsed="true" />₫
+                                                </span>
+                                                <span class="text-danger fw-bold">
+                                                    <fmt:formatNumber value="${rp.discountPrice}" type="number" groupingUsed="true" />₫
+                                                </span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <fmt:formatNumber value="${rp.price}" type="currency" currencySymbol="₫" />
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </div>
                             </div>
@@ -240,7 +276,7 @@
             </div>
         </div>
     </c:if>
-    </div>
+</div>
 
 <script>
     function decreaseQty() {
