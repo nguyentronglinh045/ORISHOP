@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,7 +55,8 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
-
+    
+    
     // Quan hệ One-to-Many với OrderDetail: Một đơn hàng có nhiều chi tiết sản phẩm
     // mappedBy = "order" nghĩa là bên OrderDetail có thuộc tính tên là order
     @OneToMany(mappedBy = "order")
