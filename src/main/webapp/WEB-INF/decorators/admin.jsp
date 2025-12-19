@@ -8,7 +8,9 @@
             <meta charset="utf-8" />
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-            <title>${title}</title>
+            <title>
+                <sitemesh:write property="title" default="ORISHOP Admin" />
+            </title>
             <!-- Bootstrap 5 Local -->
             <link href="<c:url value='/assets/lib/bootstrap/css/bootstrap.min.css'/>" rel="stylesheet">
             <!-- Font Awesome 6 Local -->

@@ -3,6 +3,10 @@
         <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
             <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
+                <head>
+                    <title>Quản lý Người dùng - ORISHOP Admin</title>
+                </head>
+
                 <!-- User List Styles -->
                 <jsp:include page="sections/styles/list-styles.jsp" />
 

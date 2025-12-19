@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+        <head>
+            <title>Thêm Người dùng - ORISHOP Admin</title>
+        </head>
+
         <!-- User Form Styles -->
         <jsp:include page="sections/styles/form-styles.jsp" />
 
