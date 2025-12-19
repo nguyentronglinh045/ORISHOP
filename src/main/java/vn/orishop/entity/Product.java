@@ -13,7 +13,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +40,7 @@ public class Product implements Serializable {
 
     // THÊM MỚI: Phần trăm giảm giá (ví dụ: 10, 20...)
     @Column(name = "discount")
-    private int discount;
+    private Integer discount;
 
     @Column(name = "quantity")
     private int quantity;
@@ -64,7 +63,7 @@ public class Product implements Serializable {
     
     // Helper method: Tính giá sau khi giảm
     public double getDiscountPrice() {
-        if (discount > 0) {
+        if (discount != null && discount > 0) {
             return price - (price * discount / 100);
         }
         return price;
