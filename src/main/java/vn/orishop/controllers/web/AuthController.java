@@ -1,7 +1,5 @@
 package vn.orishop.controllers.web;
 
-import java.io.IOException;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -9,29 +7,29 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
+import java.io.IOException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
-
 import vn.orishop.entity.User;
 import vn.orishop.services.IUserService;
 import vn.orishop.services.impl.UserServiceImpl;
 import vn.orishop.utils.Constant;
 
 // [SỬA LỖI] Đã xóa "/forgot-password" để tránh xung đột
-@WebServlet(urlPatterns = { "/login", "/register", "/logout" })
+@WebServlet(urlPatterns = {"/login", "/register", "/logout"})
 public class AuthController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    
+
     // Gọi Service
     IUserService userService = new UserServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String url = req.getRequestURI();
-        
+
         if (url.contains("login")) {
             req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
         } else if (url.contains("register")) {
@@ -39,7 +37,7 @@ public class AuthController extends HttpServlet {
         } else if (url.contains("logout")) {
             HttpSession session = req.getSession();
             session.removeAttribute("account"); // Xóa session user
-            
+
             // Xóa cookie nhớ mật khẩu nếu có
             Cookie[] cookies = req.getCookies();
             if (cookies != null) {
@@ -52,12 +50,13 @@ public class AuthController extends HttpServlet {
                 }
             }
             resp.sendRedirect(req.getContextPath() + "/home");
-        } 
+        }
         // [ĐÃ XÓA] Logic forgot-password cũ đã được chuyển sang Controller mới
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String url = req.getRequestURI();
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
@@ -69,7 +68,8 @@ public class AuthController extends HttpServlet {
         }
     }
 
-    protected void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void login(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         // Lấy dữ liệu từ form
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -103,15 +103,16 @@ public class AuthController extends HttpServlet {
         }
     }
 
-    protected void register(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void register(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         try {
             User user = new User();
-            
+
             // Đăng ký Converter Date cho BeanUtils để tránh lỗi nếu form có gửi ngày tháng
             DateConverter dt = new DateConverter(null);
             dt.setPattern("yyyy-MM-dd");
             ConvertUtils.register(dt, java.util.Date.class);
-            
+
             // Map dữ liệu từ form đăng ký (username, password, fullname, email)
             BeanUtils.populate(user, req.getParameterMap());
 
@@ -123,11 +124,11 @@ public class AuthController extends HttpServlet {
             }
 
             // Set mặc định role là User (0) và ngày tạo
-            user.setRole(0); 
+            user.setRole(0);
             user.setCreateDate(new java.util.Date());
 
             userService.insert(user);
-            
+
             req.setAttribute("alert", "Đăng ký thành công! Vui lòng đăng nhập.");
             req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
 

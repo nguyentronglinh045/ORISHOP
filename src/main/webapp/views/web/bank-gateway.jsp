@@ -46,7 +46,7 @@
 
         <div class="col-md-7 form-section">
             <h4 class="mb-4 text-primary">Nhập thông tin thẻ ATM/Internet Banking</h4>
-            
+
             <form action="<c:url value='/payment/process'/>" method="post" id="paymentForm">
                 <div class="mb-3">
                     <label class="form-label">Ngân hàng</label>
@@ -83,7 +83,7 @@
                 <button type="submit" class="btn btn-pay" id="btnPay">
                     <i class="fas fa-check-circle me-2"></i>XÁC NHẬN THANH TOÁN
                 </button>
-                
+
                 <div class="text-center mt-3">
                     <a href="<c:url value='/cart'/>" class="text-muted text-decoration-none small">
                         <i class="fas fa-arrow-left me-1"></i>Hủy giao dịch
@@ -101,7 +101,7 @@
         const btn = document.getElementById('btnPay');
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ĐANG XỬ LÝ...';
         btn.disabled = true;
-        
+
         // Đợi 2 giây cho giống thật rồi mới submit
         setTimeout(() => {
             this.submit();

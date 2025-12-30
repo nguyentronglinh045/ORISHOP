@@ -1,9 +1,9 @@
 package vn.orishop.utils;
 
-import java.util.Properties;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import java.util.Properties;
 
 public class EmailUtils {
     // Thay đổi thông tin của bạn ở đây
@@ -20,11 +20,14 @@ public class EmailUtils {
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.port", SSL_PORT);
 
-        Session session = Session.getDefaultInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(APP_EMAIL, APP_PASSWORD);
-            }
-        });
+        Session session =
+                Session.getDefaultInstance(
+                        props,
+                        new Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication(APP_EMAIL, APP_PASSWORD);
+                            }
+                        });
 
         MimeMessage message = new MimeMessage(session);
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));

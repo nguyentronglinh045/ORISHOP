@@ -5,13 +5,13 @@
         <tag-rule-bundle class="org.sitemesh.content.tagrules.html.CoreHtmlTagRuleBundle"/>
         <tag-rule-bundle class="org.sitemesh.content.tagrules.html.DivExtractingTagRuleBundle"/>
     </content-processor>
-    
+
     <!-- Default decorator prefix is /WEB-INF/decorators/ so we just use filename -->
-    
+
     <!-- 1. Cấu hình ngoại lệ TRƯỚC (Không ốp layout) -->
     <mapping path="/assets/*" exclude="true"/>
     <mapping path="/api/*" exclude="true"/>
-    
+
     <!-- 2. Layout cho trang Quản trị (Admin) -->
     <mapping path="/admin/*" decorator="admin.jsp"/>
 

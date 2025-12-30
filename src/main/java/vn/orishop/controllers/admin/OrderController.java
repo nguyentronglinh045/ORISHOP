@@ -1,20 +1,24 @@
 package vn.orishop.controllers.admin;
 
-import java.io.IOException;
-import java.util.List;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import java.io.IOException;
+import java.util.List;
 import vn.orishop.entity.Order;
 import vn.orishop.services.IOrderService;
 import vn.orishop.services.impl.OrderServiceImpl;
 
-@WebServlet(urlPatterns = { "/admin/orders", "/admin/order/update",
-        "/admin/order/edit", "/admin/order/delete", "/admin/order/reset" })
+@WebServlet(
+        urlPatterns = {
+            "/admin/orders",
+            "/admin/order/update",
+            "/admin/order/edit",
+            "/admin/order/delete",
+            "/admin/order/reset"
+        })
 public class OrderController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -85,10 +89,10 @@ public class OrderController extends HttpServlet {
         try {
             // Lấy id từ param
             String id = request.getParameter("id");
-            
+
             // Gọi service tìm theo ID
             Order order = orderService.findById(Integer.parseInt(id)); //
-            
+
             // Đẩy đối tượng ra view
             request.setAttribute("order", order);
         } catch (Exception e) {
@@ -109,7 +113,8 @@ public class OrderController extends HttpServlet {
 
             if (oldOrder != null) {
                 // 3. Chỉ cập nhật những thông tin thay đổi từ form Admin
-                // (Status, Address, Phone - KHÔNG dùng BeanUtils.populate để tránh ghi đè null lên User)
+                // (Status, Address, Phone - KHÔNG dùng BeanUtils.populate để tránh ghi đè null lên
+                // User)
                 String status = request.getParameter("status");
                 String address = request.getParameter("address");
                 String phone = request.getParameter("phone");
@@ -136,10 +141,10 @@ public class OrderController extends HttpServlet {
         try {
             // Lấy id từ param
             String id = request.getParameter("id");
-            
+
             // Gọi hàm delete trong service
             orderService.delete(Integer.parseInt(id)); //
-            
+
             request.setAttribute("message", "Đã xóa đơn hàng thành công");
         } catch (Exception e) {
             e.printStackTrace();

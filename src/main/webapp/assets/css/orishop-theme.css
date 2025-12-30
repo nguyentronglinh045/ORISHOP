@@ -11,7 +11,7 @@
     --secondary: #ffd1dc;
     --accent: #ffb6c1;
     --gold: #d4a574;
-    
+
     /* Neutral Colors */
     --dark: #2d3436;
     --dark-light: #636e72;
@@ -19,37 +19,37 @@
     --light-gray: #f8f9fa;
     --white: #ffffff;
     --border: #e9ecef;
-    
+
     /* Status Colors */
     --success: #00b894;
     --warning: #fdcb6e;
     --danger: #e74c3c;
     --info: #74b9ff;
-    
+
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, #ff6b9d, #ffb6c1);
     --gradient-gold: linear-gradient(135deg, #d4a574, #ffb6c1);
     --gradient-light: linear-gradient(135deg, #fff5f8, #ffd1dc);
-    
+
     /* Shadows */
     --shadow-sm: 0 2px 8px rgba(255, 107, 157, 0.1);
     --shadow-md: 0 4px 16px rgba(255, 107, 157, 0.15);
     --shadow-lg: 0 8px 32px rgba(255, 107, 157, 0.2);
     --shadow-hover: 0 12px 40px rgba(255, 107, 157, 0.25);
-    
+
     /* Border Radius */
     --radius-sm: 8px;
     --radius-md: 15px;
     --radius-lg: 25px;
     --radius-full: 50px;
-    
+
     /* Spacing */
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
     --spacing-lg: 24px;
     --spacing-xl: 32px;
-    
+
     /* Transitions */
     --transition-fast: 0.2s ease;
     --transition-base: 0.3s ease;
@@ -324,10 +324,9 @@ h6 { font-size: 1rem; }
     h1 { font-size: 2rem; }
     h2 { font-size: 1.75rem; }
     h3 { font-size: 1.5rem; }
-    
+
     .btn-lg {
         padding: 12px 30px;
         font-size: 1rem;
     }
 }
-

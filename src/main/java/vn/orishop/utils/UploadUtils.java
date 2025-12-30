@@ -1,21 +1,19 @@
 package vn.orishop.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
-
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import org.apache.commons.io.FilenameUtils;
 
 public class UploadUtils {
 
-  
-    public static String processUpload(String fieldName, HttpServletRequest req, String storeFolder, String storedFilename)
+    public static String processUpload(
+            String fieldName, HttpServletRequest req, String storeFolder, String storedFilename)
             throws IOException, ServletException {
-        
+
         // Lấy phần dữ liệu file từ request theo tên field
         Part filePart = req.getPart(fieldName);
 
@@ -41,8 +39,9 @@ public class UploadUtils {
 
         // Lấy tên file gốc mà người dùng upload (ví dụ: my-photo.jpg)
         // getSubmittedFileName() là phương thức của Servlet 3.1+
-        String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-        
+        String originalFileName =
+                Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
         // Lấy phần mở rộng của file (ví dụ: jpg, png) dùng thư viện Apache Commons IO
         // FilenameUtils.getExtension giúp xử lý an toàn các ký tự đặc biệt
         String fileExtension = FilenameUtils.getExtension(originalFileName);

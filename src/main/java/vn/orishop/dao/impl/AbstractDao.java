@@ -1,11 +1,9 @@
 package vn.orishop.dao.impl;
 
-import java.util.List;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
-
+import java.util.List;
 import vn.orishop.configs.JPAConfig;
 
 public class AbstractDao<T> {
@@ -98,7 +96,7 @@ public class AbstractDao<T> {
             enma.close();
         }
     }
-    
+
     // Đếm tổng số lượng bản ghi
     public int count() {
         EntityManager enma = JPAConfig.getEntityManager();

@@ -159,7 +159,7 @@
       font-weight: 600;
     }
 
-    
+
     .category-parent {
       border-bottom: 1px solid #f5f5f5;
     }

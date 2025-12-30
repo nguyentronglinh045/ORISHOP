@@ -1,32 +1,32 @@
 package vn.orishop.controllers.web;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import vn.orishop.entity.Product;
 import vn.orishop.models.CartItem;
 import vn.orishop.services.IProductService;
 import vn.orishop.services.impl.ProductServiceImpl;
 
-@WebServlet(urlPatterns = { "/cart", "/cart/add", "/cart/remove", "/cart/update", "/cart/checkout" })
+@WebServlet(urlPatterns = {"/cart", "/cart/add", "/cart/remove", "/cart/update", "/cart/checkout"})
 public class CartController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    
+
     // Gọi Service
     IProductService productService = new ProductServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String url = req.getRequestURI();
-        
+
         if (url.contains("add")) {
             addToCart(req, resp);
         } else if (url.contains("remove")) {
@@ -40,9 +40,10 @@ public class CartController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String url = req.getRequestURI();
-        
+
         if (url.contains("update")) {
             updateCart(req, resp);
         }
@@ -51,14 +52,14 @@ public class CartController extends HttpServlet {
     protected void addToCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // Lấy session
         HttpSession session = req.getSession();
-        
+
         // Lấy id sản phẩm từ url
         String pId = req.getParameter("pid");
         int productId = Integer.parseInt(pId);
-        
+
         // Lấy sản phẩm từ CSDL
         Product product = productService.findById(productId);
-        
+
         if (product != null) {
             // Lấy giỏ hàng từ session (Giả sử lưu dưới dạng Map<ProductId, CartItem>)
             Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
@@ -77,24 +78,27 @@ public class CartController extends HttpServlet {
                 item.setProductId(product.getProductId());
                 item.setProductName(product.getProductName());
                 item.setImage(product.getImage());
-                item.setProduct(product); // Lưu giữ object product gốc để hiển thị thông tin phụ (như giá gốc)
+                item.setProduct(
+                        product); // Lưu giữ object product gốc để hiển thị thông tin phụ (như giá
+                // gốc)
                 item.setQuantity(1);
-                
+
                 // QUAN TRỌNG: Sử dụng giá sau giảm để tính tiền
                 item.setUnitPrice(product.getDiscountPrice());
-                
+
                 cart.put(productId, item);
             }
 
             // Cập nhật lại session
             session.setAttribute("cart", cart);
         }
-        
+
         // Quay lại trang trước đó hoặc trang giỏ hàng
         resp.sendRedirect(req.getContextPath() + "/cart");
     }
 
-    protected void removeFromCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void removeFromCart(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
         HttpSession session = req.getSession();
         String pId = req.getParameter("pid");
         int productId = Integer.parseInt(pId);
@@ -104,17 +108,17 @@ public class CartController extends HttpServlet {
             cart.remove(productId);
             session.setAttribute("cart", cart);
         }
-        
+
         resp.sendRedirect(req.getContextPath() + "/cart");
     }
 
     protected void updateCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
-        
+
         // Lấy id và số lượng mới từ form
         String pId = req.getParameter("pid");
         String quantityStr = req.getParameter("quantity");
-        
+
         int productId = Integer.parseInt(pId);
         int quantity = Integer.parseInt(quantityStr);
 
@@ -129,7 +133,7 @@ public class CartController extends HttpServlet {
             }
             session.setAttribute("cart", cart);
         }
-        
+
         resp.sendRedirect(req.getContextPath() + "/cart");
     }
 }

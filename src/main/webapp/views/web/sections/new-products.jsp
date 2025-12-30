@@ -47,7 +47,7 @@
                                     </c:otherwise>
                                 </c:choose>
                             </a>
-                             
+
                         </div>
                         <div class="product-body">
                             <div class="product-category">
@@ -62,7 +62,7 @@
                                 </span>
                                 <span class="rating-count">(4.5)</span>
                             </div>
-                            
+
                             <div class="product-price-wrapper">
                                 <c:choose>
                                     <c:when test="${p.discount > 0}">
