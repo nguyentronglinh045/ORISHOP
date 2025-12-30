@@ -306,107 +306,116 @@
             <!-- Sidebar Overlay -->
             <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-            <div id="layoutSidenav">
-                <!-- Sidebar -->
-                <div id="layoutSidenav_nav">
-                    <nav class="sb-sidenav accordion" id="sidenavAccordion">
-                        <div class="sb-sidenav-menu">
-                            <div class="nav">
-                                <div class="sb-sidenav-menu-heading">Quản lý chính</div>
-                                <a class="nav-link" href="<c:url value='/admin/home'/>">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
-                                    Dashboard
-                                </a>
-                                <a class="nav-link" href="<c:url value='/admin/categories'/>">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-layer-group"></i></div>
-                                    Quản lý Danh mục
-                                </a>
-                                <a class="nav-link" href="<c:url value='/admin/products'/>">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
-                                    Quản lý Sản phẩm
-                                </a>
-                                <a class="nav-link" href="<c:url value='/admin/users'/>">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                                    Quản lý Người dùng
-                                </a>
-                                <a class="nav-link" href="<c:url value='/admin/orders'/>">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
-                                    Quản lý Đơn hàng
-                                </a>
+                <div id="layoutSidenav">
+                    <!-- Sidebar -->
+                    <div id="layoutSidenav_nav">
+                        <nav class="sb-sidenav accordion" id="sidenavAccordion">
+                            <div class="sb-sidenav-menu">
+                                <div class="nav">
+                                    <div class="sb-sidenav-menu-heading">Quản lý chính</div>
+                                    <a class="nav-link" href="<c:url value='/admin/home'/>" data-page="home">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
+                                        Dashboard
+                                    </a>
+                                    <a class="nav-link" href="<c:url value='/admin/categories'/>" data-page="categor">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-layer-group"></i></div>
+                                        Quản lý Danh mục
+                                    </a>
+                                    <a class="nav-link" href="<c:url value='/admin/products'/>" data-page="product">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
+                                        Quản lý Sản phẩm
+                                    </a>
+                                    <a class="nav-link" href="<c:url value='/admin/users'/>" data-page="user">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                        Quản lý Người dùng
+                                    </a>
+                                    <a class="nav-link" href="<c:url value='/admin/orders'/>" data-page="order">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
+                                        Quản lý Đơn hàng
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    </nav>
+                        </nav>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div id="layoutSidenav_content">
+                        <main>
+                            <!-- Nội dung của từng trang con -->
+                            <sitemesh:write property="body" />
+                        </main>
+                        <footer class="py-4 bg-light mt-auto">
+                            <div class="container-fluid px-4">
+                                <div class="d-flex align-items-center justify-content-between small">
+                                    <div class="text-muted">Copyright &copy; OriShop 2025</div>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
                 </div>
 
-                <!-- Main Content -->
-                <div id="layoutSidenav_content">
-                    <main>
-                        <!-- Nội dung của từng trang con sẽ được ốp vào đây -->
-                        <sitemesh:write property="body" />
-                    </main>
-                    <footer class="py-4 bg-light mt-auto">
-                        <div class="container-fluid px-4">
-                            <div class="d-flex align-items-center justify-content-between small">
-                                <div class="text-muted">Copyright &copy; OriShop 2025</div>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </div>
+                <!-- Bootstrap Bundle JS Local (includes Popper) -->
+                <script src="<c:url value='/assets/lib/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
+                <!-- Simple DataTables JS -->
+                <script
+                    src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
 
-            <!-- Bootstrap Bundle JS Local (includes Popper) -->
-            <script src="<c:url value='/assets/lib/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
-            <!-- Simple DataTables JS -->
-            <script
-                src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
+                <!-- Mobile Menu Toggle Scripts -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const sidebarToggle = document.getElementById('sidebarToggle');
+                        const navbarToggle = document.getElementById('navbarToggle');
+                        const sidebar = document.getElementById('layoutSidenav_nav');
+                        const navbarNav = document.getElementById('navbarNav');
+                        const overlay = document.getElementById('sidebarOverlay');
 
-            <!-- Mobile Menu Toggle Scripts -->
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const sidebarToggle = document.getElementById('sidebarToggle');
-                    const navbarToggle = document.getElementById('navbarToggle');
-                    const sidebar = document.getElementById('layoutSidenav_nav');
-                    const navbarNav = document.getElementById('navbarNav');
-                    const overlay = document.getElementById('sidebarOverlay');
-
-                    // Sidebar Toggle
-                    if (sidebarToggle) {
-                        sidebarToggle.addEventListener('click', function () {
-                            sidebar.classList.toggle('show');
-                            overlay.classList.toggle('show');
-                        });
-                    }
-
-                    // Navbar Mobile Toggle
-                    if (navbarToggle) {
-                        navbarToggle.addEventListener('click', function () {
-                            navbarNav.classList.toggle('show');
-                        });
-                    }
-
-                    // Close sidebar when clicking overlay
-                    if (overlay) {
-                        overlay.addEventListener('click', function () {
-                            sidebar.classList.remove('show');
-                            overlay.classList.remove('show');
-                        });
-                    }
-
-                    // Close menus when window resizes to desktop
-                    window.addEventListener('resize', function () {
-                        if (window.innerWidth > 992) {
-                            sidebar.classList.remove('show');
-                            overlay.classList.remove('show');
+                        // Sidebar Toggle
+                        if (sidebarToggle) {
+                            sidebarToggle.addEventListener('click', function () {
+                                sidebar.classList.toggle('show');
+                                overlay.classList.toggle('show');
+                            });
                         }
-                        if (window.innerWidth > 768) {
-                            navbarNav.classList.remove('show');
+
+                        // Navbar Mobile Toggle
+                        if (navbarToggle) {
+                            navbarToggle.addEventListener('click', function () {
+                                navbarNav.classList.toggle('show');
+                            });
                         }
+
+                        // Close sidebar when clicking overlay
+                        if (overlay) {
+                            overlay.addEventListener('click', function () {
+                                sidebar.classList.remove('show');
+                                overlay.classList.remove('show');
+                            });
+                        }
+
+                        // Close menus when window resizes to desktop
+                        window.addEventListener('resize', function () {
+                            if (window.innerWidth > 992) {
+                                sidebar.classList.remove('show');
+                                overlay.classList.remove('show');
+                            }
+                            if (window.innerWidth > 768) {
+                                navbarNav.classList.remove('show');
+                            }
+                        });
+                        
+                        // Active menu based on current URL
+                        const currentPath = window.location.pathname;
+                        document.querySelectorAll('.sb-sidenav-menu .nav-link').forEach(function(link) {
+                            const page = link.getAttribute('data-page');
+                            if (page && currentPath.includes(page)) {
+                                link.classList.add('active');
+                            }
+                        });
                     });
-                });
-            </script>
+                </script>
 
-            <!-- Custom Admin Scripts -->
-            ${page.properties['page.script']}
+                <!-- Custom Admin Scripts -->
+                ${page.properties['page.script']}
         </body>
 
         </html>
