@@ -36,7 +36,7 @@ public class RevenueApiController extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         
-        // Lấy tham số period (week, month, quarter)
+        // Lấy tham số period (week, month)
         String period = req.getParameter("period");
         if (period == null || period.isEmpty()) {
             period = "month"; // Mặc định là tháng hiện tại
@@ -70,34 +70,48 @@ public class RevenueApiController extends HttpServlet {
      */
     private Date[] calculateDateRange(String period) {
         Calendar cal = Calendar.getInstance();
-        Date endDate = cal.getTime(); // Ngày hiện tại
+        Date startDate, endDate;
         
-        // Reset về đầu ngày cho endDate
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        endDate = cal.getTime();
-        
-        // Tính startDate dựa trên period
         switch (period.toLowerCase()) {
             case "week":
-                cal.add(Calendar.DAY_OF_MONTH, -6); // 7 ngày gần nhất
+                // Tuần: Thứ 2 -> Chủ nhật của tuần hiện tại (theo chuẩn ISO và phổ biến ở VN)
+                // Calendar.DAY_OF_WEEK: 1=Sunday, 2=Monday, ..., 7=Saturday
+                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+                
+                // Tính số ngày cần lùi để về thứ 2
+                // Nếu là Chủ nhật (1), lùi 6 ngày; Thứ 2 (2) lùi 0 ngày; Thứ 3 (3) lùi 1 ngày...
+                int daysToMonday = (dayOfWeek == Calendar.SUNDAY) ? 6 : (dayOfWeek - Calendar.MONDAY);
+                cal.add(Calendar.DAY_OF_MONTH, -daysToMonday);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = cal.getTime();
+                
+                // End = Chủ nhật (start + 6 ngày)
+                cal.add(Calendar.DAY_OF_MONTH, 6);
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                endDate = cal.getTime();
                 break;
-            case "quarter":
-                cal.add(Calendar.MONTH, -3); // 3 tháng gần nhất
-                break;
+                
             case "month":
             default:
-                // Lấy ngày đầu tháng hiện tại
+                // Tháng: Ngày 1 -> ngày cuối tháng hiện tại
                 cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = cal.getTime();
+                
+                // End = ngày cuối tháng
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                endDate = cal.getTime();
                 break;
         }
-        
-        // Reset về đầu ngày cho startDate
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        Date startDate = cal.getTime();
         
         return new Date[] { startDate, endDate };
     }

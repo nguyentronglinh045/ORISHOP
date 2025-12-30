@@ -12,7 +12,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import vn.orishop.models.DailyStatistic;
 import vn.orishop.services.IOrderService;
 import vn.orishop.services.IProductService;
@@ -33,7 +32,7 @@ public class AdminHomeController extends HttpServlet {
         
         // ===================== THỐNG KÊ CHO STATS CARDS =====================
         
-        // Tính khoảng thời gian tháng hiện tại
+        // Tính khoảng thời gian tháng hiện tại (ngày 1 -> ngày cuối tháng)
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -42,13 +41,14 @@ public class AdminHomeController extends HttpServlet {
         Date startOfMonth = cal.getTime();
         
         cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
-        Date endOfToday = cal.getTime();
+        Date endOfMonth = cal.getTime();
         
         // Doanh thu tháng này (chỉ đơn "Đã giao")
-        double monthlyRevenue = orderService.getTotalRevenue(startOfMonth, endOfToday);
+        double monthlyRevenue = orderService.getTotalRevenue(startOfMonth, endOfMonth);
         
         // Tổng số đơn hàng
         int totalOrders = orderService.countAll();
@@ -75,8 +75,8 @@ public class AdminHomeController extends HttpServlet {
         
         // ===================== DỮ LIỆU CHO BIỂU ĐỒ (INITIAL LOAD) =====================
         
-        // Lấy dữ liệu tháng hiện tại cho biểu đồ
-        List<DailyStatistic> chartData = orderService.getDailyStatistics(startOfMonth, endOfToday);
+        // Lấy dữ liệu tháng hiện tại cho biểu đồ (đủ các ngày trong tháng)
+        List<DailyStatistic> chartData = orderService.getDailyStatistics(startOfMonth, endOfMonth);
         
         // Chuẩn bị mảng labels, revenues, orderCounts dạng JSON string cho JS
         StringBuilder labelsBuilder = new StringBuilder("[");

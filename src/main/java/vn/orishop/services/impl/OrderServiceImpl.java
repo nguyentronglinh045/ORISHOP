@@ -67,7 +67,16 @@ public class OrderServiceImpl implements IOrderService {
         // Tạo map để tra cứu dữ liệu theo ngày
         Map<String, DailyStatistic> dataMap = new HashMap<>();
         for (Object[] row : rawData) {
-            Date date = (Date) row[0];
+            // Native query có thể trả về java.sql.Date hoặc java.util.Date
+            Date date;
+            if (row[0] instanceof java.sql.Date) {
+                date = new Date(((java.sql.Date) row[0]).getTime());
+            } else if (row[0] instanceof java.sql.Timestamp) {
+                date = new Date(((java.sql.Timestamp) row[0]).getTime());
+            } else {
+                date = (Date) row[0];
+            }
+            
             Double revenue = row[1] != null ? ((Number) row[1]).doubleValue() : 0.0;
             Long orderCount = row[2] != null ? ((Number) row[2]).longValue() : 0L;
             

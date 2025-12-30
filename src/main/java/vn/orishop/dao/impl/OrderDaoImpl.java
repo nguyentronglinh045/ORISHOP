@@ -58,31 +58,33 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     public List<Object[]> getDailyStatistics(Date startDate, Date endDate, String status) {
         EntityManager enma = JPAConfig.getEntityManager();
         try {
-            StringBuilder jpql = new StringBuilder(
-                "SELECT FUNCTION('CONVERT', DATE, o.orderDate) as orderDay, " +
-                "COALESCE(SUM(o.amount), 0) as totalRevenue, " +
-                "COUNT(o) as orderCount " +
-                "FROM Order o " +
-                "WHERE o.orderDate BETWEEN :startDate AND :endDate"
+            // Sử dụng Native Query cho MS SQL Server
+            StringBuilder sql = new StringBuilder(
+                "SELECT CAST(orderDate AS DATE) as orderDay, " +
+                "COALESCE(SUM(amount), 0) as totalRevenue, " +
+                "COUNT(*) as orderCount " +
+                "FROM orders " +
+                "WHERE orderDate BETWEEN :startDate AND :endDate"
             );
             
             if (status != null && !status.isEmpty()) {
-                jpql.append(" AND o.status = :status");
+                sql.append(" AND status = :status");
             }
             
-            jpql.append(" GROUP BY FUNCTION('CONVERT', DATE, o.orderDate)");
-            jpql.append(" ORDER BY FUNCTION('CONVERT', DATE, o.orderDate)");
+            sql.append(" GROUP BY CAST(orderDate AS DATE)");
+            sql.append(" ORDER BY CAST(orderDate AS DATE)");
             
-            TypedQuery<Object[]> query = enma.createQuery(jpql.toString(), Object[].class);
+            var query = enma.createNativeQuery(sql.toString());
             query.setParameter("startDate", startDate);
             query.setParameter("endDate", endDate);
             if (status != null && !status.isEmpty()) {
                 query.setParameter("status", status);
             }
             
-            return query.getResultList();
+            @SuppressWarnings("unchecked")
+            List<Object[]> result = query.getResultList();
+            return result;
         } catch (Exception e) {
-            // Fallback: nếu FUNCTION không hoạt động, dùng native query
             e.printStackTrace();
             return new ArrayList<>();
         } finally {

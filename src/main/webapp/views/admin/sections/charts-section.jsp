@@ -15,9 +15,6 @@
           <button class="btn btn-sm btn-time active" data-range="month">
             <i class="fas fa-calendar-alt me-1"></i>Tháng
           </button>
-          <button class="btn btn-sm btn-time" data-range="quarter">
-            <i class="fas fa-calendar me-1"></i>Quý
-          </button>
         </div>
       </div>
       <div class="card-body-custom">
@@ -45,11 +42,71 @@
       let chartRevenues = ${ not empty chartRevenues ?chartRevenues: "[]"};
       let chartOrderCounts = ${ not empty chartOrderCounts ?chartOrderCounts: "[]"};
 
+      // ===================== HÀM TÍNH SUGGESTED MAX =====================
+      // Tính suggestedMax để biểu đồ scale đẹp (khoảng 1.5-3 lần giá trị max)
+      function calculateSuggestedMax(dataArray) {
+        if (!dataArray || dataArray.length === 0) return 100;
+        const maxVal = Math.max(...dataArray);
+        if (maxVal === 0) return 100;
+
+        // Tính giá trị max gợi ý (khoảng 1.5 lần giá trị lớn nhất)
+        // Làm tròn lên theo các mức đẹp: 100, 500, 1K, 5K, 10K, 50K, 100K, 500K, 1M, 5M, 10M...
+        const multiplier = 1.5;
+        let suggested = maxVal * multiplier;
+
+        // Các ngưỡng làm tròn đẹp
+        const thresholds = [
+          100, 200, 500,
+          1000, 2000, 5000,
+          10000, 20000, 50000,
+          100000, 200000, 500000,
+          1000000, 2000000, 5000000,
+          10000000, 20000000, 50000000,
+          100000000, 200000000, 500000000,
+          1000000000, 2000000000, 5000000000
+        ];
+
+        // Tìm ngưỡng phù hợp
+        for (let i = 0; i < thresholds.length; i++) {
+          if (suggested <= thresholds[i]) {
+            return thresholds[i];
+          }
+        }
+
+        // Nếu vượt quá tất cả ngưỡng, làm tròn lên
+        return Math.ceil(suggested / 1000000000) * 1000000000;
+      }
+
+      // Tính suggestedMax cho số đơn hàng
+      function calculateOrderSuggestedMax(dataArray) {
+        if (!dataArray || dataArray.length === 0) return 10;
+        const maxVal = Math.max(...dataArray);
+        if (maxVal === 0) return 10;
+
+        const multiplier = 1.5;
+        let suggested = maxVal * multiplier;
+
+        // Ngưỡng cho số đơn hàng (số nguyên đẹp)
+        const thresholds = [5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000];
+
+        for (let i = 0; i < thresholds.length; i++) {
+          if (suggested <= thresholds[i]) {
+            return thresholds[i];
+          }
+        }
+
+        return Math.ceil(suggested / 1000) * 1000;
+      }
+
       // ===================== KHỞI TẠO BIỂU ĐỒ =====================
       const ctx = document.getElementById('revenueChart');
       let revenueChart = null;
 
       if (ctx) {
+        // Tính suggestedMax ban đầu
+        const initialRevenueSuggestedMax = calculateSuggestedMax(chartRevenues);
+        const initialOrderSuggestedMax = calculateOrderSuggestedMax(chartOrderCounts);
+
         revenueChart = new Chart(ctx, {
           type: 'line',
           data: {
@@ -128,6 +185,7 @@
                 display: true,
                 position: 'left',
                 beginAtZero: true,
+                suggestedMax: initialRevenueSuggestedMax,
                 grid: {
                   color: 'rgba(255, 107, 157, 0.1)',
                   drawBorder: false
@@ -154,6 +212,7 @@
                 display: true,
                 position: 'right',
                 beginAtZero: true,
+                suggestedMax: initialOrderSuggestedMax,
                 grid: {
                   drawOnChartArea: false
                 },
@@ -163,8 +222,12 @@
                     family: 'Inter',
                     size: 12
                   },
+                  stepSize: 1,
                   callback: function (value) {
-                    return value + ' đơn';
+                    if (Number.isInteger(value)) {
+                      return value + ' đơn';
+                    }
+                    return '';
                   }
                 }
               },
@@ -203,17 +266,21 @@
                 const newRevenues = statistics.map(s => s.revenue);
                 const newOrderCounts = statistics.map(s => s.orderCount);
 
-                // Cập nhật chart
+                // Cập nhật chart data
                 revenueChart.data.labels = newLabels;
                 revenueChart.data.datasets[0].data = newRevenues;
                 revenueChart.data.datasets[1].data = newOrderCounts;
+
+                // Cập nhật suggestedMax để biểu đồ scale đẹp
+                revenueChart.options.scales.y.suggestedMax = calculateSuggestedMax(newRevenues);
+                revenueChart.options.scales.y1.suggestedMax = calculateOrderSuggestedMax(newOrderCounts);
+
                 revenueChart.update();
 
                 // Cập nhật subtitle
                 const subtitleMap = {
-                  'week': 'Xu hướng doanh thu 7 ngày gần nhất',
-                  'month': 'Xu hướng doanh thu tháng hiện tại',
-                  'quarter': 'Xu hướng doanh thu 3 tháng gần nhất'
+                  'week': 'Xu hướng doanh thu tuần này (Thứ 2 - Chủ nhật)',
+                  'month': 'Xu hướng doanh thu tháng hiện tại'
                 };
                 document.querySelector('.card-subtitle-custom').textContent = subtitleMap[range] + ' (chỉ đơn "Đã giao")';
               })
