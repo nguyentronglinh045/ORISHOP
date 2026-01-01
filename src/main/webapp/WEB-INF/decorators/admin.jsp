@@ -8,7 +8,9 @@
             <meta charset="utf-8" />
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-            <title>${title}</title>
+            <title>
+                <sitemesh:write property="title" default="ORISHOP Admin" />
+            </title>
             <!-- Bootstrap 5 Local -->
             <link href="<c:url value='/assets/lib/bootstrap/css/bootstrap.min.css'/>" rel="stylesheet">
             <!-- Font Awesome 6 Local -->
@@ -311,23 +313,23 @@
                         <div class="sb-sidenav-menu">
                             <div class="nav">
                                 <div class="sb-sidenav-menu-heading">Quản lý chính</div>
-                                <a class="nav-link" href="<c:url value='/admin/home'/>">
+                                <a class="nav-link" href="<c:url value='/admin/home'/>" data-page="home">
                                     <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
                                     Dashboard
                                 </a>
-                                <a class="nav-link" href="<c:url value='/admin/categories'/>">
+                                <a class="nav-link" href="<c:url value='/admin/categories'/>" data-page="categor">
                                     <div class="sb-nav-link-icon"><i class="fas fa-layer-group"></i></div>
                                     Quản lý Danh mục
                                 </a>
-                                <a class="nav-link" href="<c:url value='/admin/products'/>">
+                                <a class="nav-link" href="<c:url value='/admin/products'/>" data-page="product">
                                     <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                                     Quản lý Sản phẩm
                                 </a>
-                                <a class="nav-link" href="<c:url value='/admin/users'/>">
+                                <a class="nav-link" href="<c:url value='/admin/users'/>" data-page="user">
                                     <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                                     Quản lý Người dùng
                                 </a>
-                                <a class="nav-link" href="<c:url value='/admin/orders'/>">
+                                <a class="nav-link" href="<c:url value='/admin/orders'/>" data-page="order">
                                     <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
                                     Quản lý Đơn hàng
                                 </a>
@@ -339,7 +341,7 @@
                 <!-- Main Content -->
                 <div id="layoutSidenav_content">
                     <main>
-                        <!-- Nội dung của từng trang con sẽ được ốp vào đây -->
+                        <!-- Nội dung của từng trang con -->
                         <sitemesh:write property="body" />
                     </main>
                     <footer class="py-4 bg-light mt-auto">
@@ -398,6 +400,15 @@
                         }
                         if (window.innerWidth > 768) {
                             navbarNav.classList.remove('show');
+                        }
+                    });
+
+                    // Active menu based on current URL
+                    const currentPath = window.location.pathname;
+                    document.querySelectorAll('.sb-sidenav-menu .nav-link').forEach(function (link) {
+                        const page = link.getAttribute('data-page');
+                        if (page && currentPath.includes(page)) {
+                            link.classList.add('active');
                         }
                     });
                 });

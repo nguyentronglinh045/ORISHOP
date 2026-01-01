@@ -1,10 +1,10 @@
 package vn.orishop.models;
 
 import java.io.Serializable;
-import vn.orishop.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.orishop.entity.Product;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +15,7 @@ public class CartItem implements Serializable {
     private String image;
     private int quantity;
     private double unitPrice;
-    
+
     // Thuộc tính tiện ích để giữ tham chiếu Product gốc nếu cần
     private Product product;
 

@@ -1,10 +1,8 @@
 package vn.orishop.dao.impl;
 
-import java.util.List;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-
+import java.util.List;
 import vn.orishop.configs.JPAConfig;
 import vn.orishop.dao.IUserDao;
 import vn.orishop.entity.User;

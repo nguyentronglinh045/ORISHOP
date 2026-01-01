@@ -1,8 +1,5 @@
 package vn.orishop.entity;
 
-import java.io.Serializable;
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,7 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+import java.io.Serializable;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,12 +40,12 @@ public class Category implements Serializable {
     private String icon;
 
     // --- QUAN HỆ CHA - CON (Self-referencing) ---
-    
+
     // Danh mục cha (Parent)
     @ManyToOne
     @JoinColumn(name = "parentId")
     @ToString.Exclude // Ngăn chặn đệ quy vô tận và lỗi Lazy load khi in log
-    private Category category; 
+    private Category category;
 
     // Danh sách danh mục con (Children)
     // QUAN TRỌNG: Đổi sang EAGER để lấy luôn danh sách con khi query cha, phục vụ cho Menu đa cấp
@@ -74,7 +72,7 @@ public class Category implements Serializable {
         product.setCategory(null);
         return product;
     }
-    
+
     // Helper để kiểm tra có con hay không (tiện cho JSP)
     public boolean hasSubCategories() {
         return subCategories != null && !subCategories.isEmpty();

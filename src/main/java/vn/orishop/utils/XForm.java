@@ -1,5 +1,3 @@
 package vn.orishop.utils;
 
-public class XForm {
-
-}
+public class XForm {}

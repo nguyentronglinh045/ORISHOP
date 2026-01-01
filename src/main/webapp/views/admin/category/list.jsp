@@ -2,6 +2,10 @@
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
         <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
+            <head>
+                <title>Quản lý Danh mục - ORISHOP Admin</title>
+            </head>
+
             <!-- Category List Styles -->
             <jsp:include page="sections/styles/list-styles.jsp" />
 

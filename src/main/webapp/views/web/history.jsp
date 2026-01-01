@@ -2,6 +2,10 @@
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
         <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
+            <head>
+                <title>Lịch sử đơn hàng - OriShop</title>
+            </head>
+
             <%@ include file="sections/styles/history-styles.jsp" %>
 
                 <!-- Hero Section -->

@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+        <head>
+            <title>Đặt hàng thành công - OriShop</title>
+        </head>
+
         <%@ include file="sections/styles/order-success-styles.jsp" %>
 
             <div class="success-page">

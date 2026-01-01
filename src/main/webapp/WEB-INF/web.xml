@@ -23,7 +23,7 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-    
+
     <!-- Thiết lập trang chủ mặc định -->
     <!-- Khi truy cập root, server sẽ thử tìm index.jsp, nếu không có sẽ gọi Servlet /home -->
     <welcome-file-list>

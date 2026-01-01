@@ -151,7 +151,7 @@
                                     <c:if test="${p.quantity <= 0}">
                                         <span class="product-badge out-of-stock">Hết hàng</span>
                                     </c:if>
-                                    
+
                                     <%-- [MỚI] Hiển thị nhãn Sale trên ảnh --%>
                                     <c:if test="${p.quantity > 0 && p.discount > 0}">
                                         <span class="product-badge sale-badge" style="background-color: #dc3545;">-${p.discount}%</span>
@@ -177,7 +177,7 @@
                                     <h3 class="product-name">
                                         <a href="<c:url value='/product/detail?id=${p.productId}'/>">${p.productName}</a>
                                     </h3>
-                                    
+
                                     <%-- [MỚI] Hiển thị giá: Xử lý giá cũ/mới --%>
                                     <div class="product-price">
                                         <c:choose>

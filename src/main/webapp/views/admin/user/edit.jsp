@@ -2,6 +2,10 @@
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
         <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
+            <head>
+                <title>Sửa Người dùng - ORISHOP Admin</title>
+            </head>
+
             <!-- User Form Styles -->
             <jsp:include page="sections/styles/form-styles.jsp" />
 

@@ -1,28 +1,27 @@
 package vn.orishop.controllers.web;
 
-import java.io.IOException;
-import java.util.Random;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
+import java.io.IOException;
+import java.util.Random;
 import vn.orishop.entity.User;
 import vn.orishop.services.IUserService;
 import vn.orishop.services.impl.UserServiceImpl;
 import vn.orishop.utils.EmailUtils;
 
-@WebServlet(urlPatterns = { "/forgot-password", "/verify-otp", "/reset-password" })
+@WebServlet(urlPatterns = {"/forgot-password", "/verify-otp", "/reset-password"})
 public class ForgotPasswordController extends HttpServlet {
-    
+
     private static final long serialVersionUID = 1L;
     IUserService userService = new UserServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String url = req.getRequestURI();
         if (url.contains("forgot-password")) {
             req.getRequestDispatcher("/views/web/forgot-password.jsp").forward(req, resp);
@@ -30,7 +29,8 @@ public class ForgotPasswordController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String url = req.getRequestURI();
         HttpSession session = req.getSession();
 
@@ -47,12 +47,16 @@ public class ForgotPasswordController extends HttpServlet {
 
             // Tạo OTP ngẫu nhiên 6 số
             String otp = String.format("%06d", new Random().nextInt(999999));
-            
+
             try {
-                EmailUtils.send(email, "Mã xác thực quên mật khẩu - ORISHOP", 
-                        "<h3>Mã OTP của bạn là: <span style='color:red'>" + otp + "</span></h3>"
-                        + "<p>Mã này sẽ hết hạn trong 5 phút.</p>");
-                
+                EmailUtils.send(
+                        email,
+                        "Mã xác thực quên mật khẩu - ORISHOP",
+                        "<h3>Mã OTP của bạn là: <span style='color:red'>"
+                                + otp
+                                + "</span></h3>"
+                                + "<p>Mã này sẽ hết hạn trong 5 phút.</p>");
+
                 // Lưu OTP và Email vào Session để kiểm tra sau
                 session.setAttribute("otp", otp);
                 session.setAttribute("resetEmail", email);
@@ -82,7 +86,7 @@ public class ForgotPasswordController extends HttpServlet {
                     req.getRequestDispatcher("/views/web/forgot-password.jsp").forward(req, resp);
                     return;
                 }
-                
+
                 req.setAttribute("step", "reset"); // Chuyển sang bước nhập mật khẩu mới
                 req.getRequestDispatcher("/views/web/forgot-password.jsp").forward(req, resp);
             } else {
@@ -109,7 +113,7 @@ public class ForgotPasswordController extends HttpServlet {
                 if (user != null) {
                     user.setPassword(newPassword); // Cần mã hóa nếu hệ thống dùng BCrypt
                     userService.update(user);
-                    
+
                     // Xóa session
                     session.removeAttribute("otp");
                     session.removeAttribute("resetEmail");

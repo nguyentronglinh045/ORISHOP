@@ -1,10 +1,6 @@
 package vn.orishop.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
-import jakarta.persistence.CascadeType; 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +12,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -58,8 +56,8 @@ public class Order implements Serializable {
 
     // Quan hệ One-to-Many với OrderDetail: Một đơn hàng có nhiều chi tiết sản phẩm
     // mappedBy = "order" nghĩa là bên OrderDetail có thuộc tính tên là order
-    
-    // [CẬP NHẬT QUAN TRỌNG] 
+
+    // [CẬP NHẬT QUAN TRỌNG]
     // cascade = CascadeType.ALL: Cho phép xóa Order thì xóa luôn OrderDetail
     // orphanRemoval = true: Xóa các chi tiết mồ côi
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)

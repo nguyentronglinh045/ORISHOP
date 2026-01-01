@@ -1,8 +1,5 @@
 package vn.orishop.entity;
 
-import java.io.Serializable;
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +10,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+import java.io.Serializable;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +39,7 @@ public class Product implements Serializable {
 
     // THÊM MỚI: Phần trăm giảm giá (ví dụ: 10, 20...)
     @Column(name = "discount")
-    private int discount;
+    private Integer discount;
 
     @Column(name = "quantity")
     private int quantity;
@@ -61,10 +59,10 @@ public class Product implements Serializable {
 
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
-    
+
     // Helper method: Tính giá sau khi giảm
     public double getDiscountPrice() {
-        if (discount > 0) {
+        if (discount != null && discount > 0) {
             return price - (price * discount / 100);
         }
         return price;

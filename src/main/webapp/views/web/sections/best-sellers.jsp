@@ -75,7 +75,7 @@
                                     </c:otherwise>
                                 </c:choose>
                             </div>
-                            
+
                             <c:choose>
                                 <c:when test="${p.quantity > 0}">
                                     <a href="<c:url value='/cart/add?pid=${p.productId}'/>" class="btn btn-add-cart">
