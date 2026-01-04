@@ -19,112 +19,103 @@ import vn.orishop.services.impl.OrderServiceImpl;
 import vn.orishop.services.impl.ProductServiceImpl;
 import vn.orishop.services.impl.UserServiceImpl;
 
-@WebServlet(urlPatterns = {"/admin/home"})
+@WebServlet(urlPatterns = { "/admin/home" })
 public class AdminHomeController extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // Services
-    private final IOrderService orderService = new OrderServiceImpl();
-    private final IUserService userService = new UserServiceImpl();
-    private final IProductService productService = new ProductServiceImpl();
+	private IOrderService orderService = new OrderServiceImpl();
+	private IUserService userService = new UserServiceImpl();
+	private IProductService productService = new ProductServiceImpl();
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        
-        // 1. Xác định khoảng thời gian (Tháng hiện tại)
-        Date startOfMonth = getStartOfMonth();
-        Date endOfMonth = getEndOfMonth();
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // 2. Lấy dữ liệu cho các thẻ thống kê (Stats Cards)
-        loadDashboardStats(req, startOfMonth, endOfMonth);
+// ===================== THỐNG KÊ CHO STATS CARDS =====================
 
-        // 3. Lấy dữ liệu cho biểu đồ (Chart)
-        loadChartData(req, startOfMonth, endOfMonth);
+// Tính khoảng thời gian tháng hiện tại (ngày 1 -> ngày cuối tháng)
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		Date startOfMonth = cal.getTime();
 
-        // 4. Forward về View
-        req.getRequestDispatcher("/views/admin/home.jsp").forward(req, resp);
-    }
+		cal = Calendar.getInstance();
+		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		Date endOfMonth = cal.getTime();
 
-    // ================= HELPER METHODS: BUSINESS LOGIC =================
+// Doanh thu tháng này (chỉ đơn "Đã giao")
+		double monthlyRevenue = orderService.getTotalRevenue(startOfMonth, endOfMonth);
 
-    private void loadDashboardStats(HttpServletRequest req, Date start, Date end) {
-        // Lấy dữ liệu từ Service
-        double monthlyRevenue = orderService.getTotalRevenue(start, end);
-        int totalOrders = orderService.countAll();
-        int pendingOrders = orderService.countByStatus("Chờ xử lý");
-        int totalCustomers = userService.findAll().size(); // Lưu ý: Nên dùng count() nếu có để tối ưu
-        int totalProducts = productService.count();
+// Tổng số đơn hàng
+		int totalOrders = orderService.countAll();
 
-        // Đẩy dữ liệu vào Request
-        req.setAttribute("monthlyRevenue", formatRevenue(monthlyRevenue));
-        req.setAttribute("monthlyRevenueRaw", monthlyRevenue);
-        req.setAttribute("totalOrders", totalOrders);
-        req.setAttribute("pendingOrders", pendingOrders);
-        req.setAttribute("totalCustomers", totalCustomers);
-        req.setAttribute("totalProducts", totalProducts);
-    }
+// Số đơn chờ xử lý
+		int pendingOrders = orderService.countByStatus("Chờ xử lý");
 
-    private void loadChartData(HttpServletRequest req, Date start, Date end) {
-        List<DailyStatistic> chartData = orderService.getDailyStatistics(start, end);
+// Tổng số khách hàng
+		int totalCustomers = userService.findAll().size();
 
-        // Sử dụng StringBuilder để tạo JSON string thủ công
-        StringBuilder labels = new StringBuilder("[");
-        StringBuilder revenues = new StringBuilder("[");
-        StringBuilder counts = new StringBuilder("[");
+// Tổng số sản phẩm
+		int totalProducts = productService.count();
 
-        for (int i = 0; i < chartData.size(); i++) {
-            DailyStatistic stat = chartData.get(i);
-            if (i > 0) {
-                labels.append(",");
-                revenues.append(",");
-                counts.append(",");
-            }
-            // Thêm dấu nháy đơn cho labels vì là String trong JS
-            labels.append("'").append(stat.getDate()).append("'");
-            revenues.append(stat.getRevenue());
-            counts.append(stat.getOrderCount());
-        }
+// Format doanh thu (VD: 128,400,000 -> "128.4M")
+		String formattedRevenue = formatRevenue(monthlyRevenue);
 
-        labels.append("]");
-        revenues.append("]");
-        counts.append("]");
+// Set attributes cho stats cards
+		req.setAttribute("monthlyRevenue", formattedRevenue);
+		req.setAttribute("monthlyRevenueRaw", monthlyRevenue);
+		req.setAttribute("totalOrders", totalOrders);
+		req.setAttribute("pendingOrders", pendingOrders);
+		req.setAttribute("totalCustomers", totalCustomers);
+		req.setAttribute("totalProducts", totalProducts);
 
-        req.setAttribute("chartLabels", labels.toString());
-        req.setAttribute("chartRevenues", revenues.toString());
-        req.setAttribute("chartOrderCounts", counts.toString());
-    }
+// ===================== DỮ LIỆU CHO BIỂU ĐỒ (INITIAL LOAD) =====================
 
-    // ================= HELPER METHODS: UTILS =================
+// Lấy dữ liệu tháng hiện tại cho biểu đồ (đủ các ngày trong tháng)
+		List<DailyStatistic> chartData = orderService.getDailyStatistics(startOfMonth, endOfMonth);
 
-    private Date getStartOfMonth() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        return cal.getTime();
-    }
+// Chuẩn bị mảng labels, revenues, orderCounts dạng JSON string cho JS
+		StringBuilder labelsBuilder = new StringBuilder("[");
+		StringBuilder revenuesBuilder = new StringBuilder("[");
+		StringBuilder orderCountsBuilder = new StringBuilder("[");
 
-    private Date getEndOfMonth() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        return cal.getTime();
-    }
+		for (int i = 0; i < chartData.size(); i++) {
+			DailyStatistic stat = chartData.get(i);
+			if (i > 0) {
+				labelsBuilder.append(",");
+				revenuesBuilder.append(",");
+				orderCountsBuilder.append(",");
+			}
+			labelsBuilder.append("'").append(stat.getDate()).append("'");
+			revenuesBuilder.append(stat.getRevenue());
+			orderCountsBuilder.append(stat.getOrderCount());
+		}
 
-    private String formatRevenue(double amount) {
-        if (amount >= 1_000_000_000) {
-            return String.format("₫%.1fB", amount / 1_000_000_000);
-        } else if (amount >= 1_000_000) {
-            return String.format("₫%.1fM", amount / 1_000_000);
-        } else if (amount >= 1_000) {
-            return String.format("₫%.1fK", amount / 1_000);
-        } else {
-            NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
-            return "₫" + nf.format(amount);
-        }
-    }
+		labelsBuilder.append("]");
+		revenuesBuilder.append("]");
+		orderCountsBuilder.append("]");
+
+		req.setAttribute("chartLabels", labelsBuilder.toString());
+		req.setAttribute("chartRevenues", revenuesBuilder.toString());
+		req.setAttribute("chartOrderCounts", orderCountsBuilder.toString());
+
+		req.getRequestDispatcher("/views/admin/home.jsp").forward(req, resp);
+	}
+
+	/** Format số tiền thành dạng ngắn gọn (VD: 128,400,000 -> "₫128.4M") */
+	private String formatRevenue(double amount) {
+		if (amount >= 1_000_000_000) {
+			return String.format("₫%.1fB", amount / 1_000_000_000);
+		} else if (amount >= 1_000_000) {
+			return String.format("₫%.1fM", amount / 1_000_000);
+		} else if (amount >= 1_000) {
+			return String.format("₫%.1fK", amount / 1_000);
+		} else {
+			NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+			return "₫" + nf.format(amount);
+		}
+	}
 }
